@@ -94,3 +94,14 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: At Hauss
+      fonts:
+        - asset: fonts/AtHaussTRIAL-Regular.otf
+        - asset: fonts/AtHaussTRIAL-Semibold.otf
+          weight: 600
+    - family: At Slam Cnd
+      fonts:
+        - asset: fonts/AtSlamCndTRIAL-Regular.otf
+        - asset: fonts/AtSlamCndTRIAL-Semibold.otf
+          weight: 600

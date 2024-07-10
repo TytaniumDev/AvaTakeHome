@@ -1,4 +1,4 @@
-# ava_take_home
+# Ava Take Home Project
 
 A new Flutter project.
 

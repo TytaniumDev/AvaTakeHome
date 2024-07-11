@@ -11,6 +11,7 @@ class CreditScoreHeaderViewData {
   final int creditScore;
   final CreditScoreRating creditScoreRating;
   final int creditScoreChange;
+  /// In real code this would go through a localization function.
   final String creditProvider;
 
   const CreditScoreHeaderViewData({

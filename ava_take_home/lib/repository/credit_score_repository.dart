@@ -1,7 +1,7 @@
 import 'package:ava_take_home/model/credit_score.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'credit_score_respository.g.dart';
+part 'credit_score_repository.g.dart';
 
 @riverpod
 CreditScore currentCreditScoreModel(CurrentCreditScoreModelRef ref) {

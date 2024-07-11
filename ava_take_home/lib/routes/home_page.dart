@@ -1,9 +1,14 @@
 import 'package:ava_take_home/components/credit_score_header/credit_score_header_view.dart';
+import 'package:ava_take_home/routes/settings.dart';
 import 'package:ava_take_home/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class HomePage extends StatelessWidget {
+  static const route = "/";
+
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +27,13 @@ class Home extends StatelessWidget {
         ),
         centerTitle: true,
         backgroundColor: AppColors.avaPrimary,
+        leading: IconButton(
+          icon: SvgPicture.asset(
+            'assets/icons/settings.svg',
+          ),
+          tooltip: "Settings",
+          onPressed: () => context.go(SettingsPage.route),
+        ),
       ),
       backgroundColor: AppColors.manilla,
       body: SafeArea(

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'credit_score_respository.dart';
+part of 'credit_score_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator

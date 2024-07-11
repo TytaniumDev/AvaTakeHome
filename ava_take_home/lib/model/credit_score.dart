@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
@@ -17,14 +16,14 @@ class CreditScore {
   final int latestChange;
 
   /// The [CreditProvider] that gave us the [currentScore] at [lastUpdatedDate].
-  final CreditProvider provider;
+  final CreditProvider creditProvider;
 
   const CreditScore({
     required this.currentScore,
     required this.lastUpdatedDate,
     required this.nextUpdateDate,
     required this.latestChange,
-    required this.provider,
+    required this.creditProvider,
   });
 
   CreditScore copyWith({
@@ -32,20 +31,20 @@ class CreditScore {
     DateTime? lastUpdatedDate,
     DateTime? nextUpdateDate,
     int? latestChange,
-    CreditProvider? provider,
+    CreditProvider? creditProvider,
   }) {
     return CreditScore(
       currentScore: currentScore ?? this.currentScore,
       lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
       nextUpdateDate: nextUpdateDate ?? this.nextUpdateDate,
       latestChange: latestChange ?? this.latestChange,
-      provider: provider ?? this.provider,
+      creditProvider: creditProvider ?? this.creditProvider,
     );
   }
 
   @override
   String toString() {
-    return 'CreditScore(currentScore: $currentScore, lastUpdatedDate: $lastUpdatedDate, nextUpdateDate: $nextUpdateDate, latestChange: $latestChange, provider: $provider)';
+    return 'CreditScore(currentScore: $currentScore, lastUpdatedDate: $lastUpdatedDate, nextUpdateDate: $nextUpdateDate, latestChange: $latestChange, provider: $creditProvider)';
   }
 
   @override
@@ -57,7 +56,7 @@ class CreditScore {
         other.lastUpdatedDate == lastUpdatedDate &&
         other.nextUpdateDate == nextUpdateDate &&
         other.latestChange == latestChange &&
-        other.provider == provider;
+        other.creditProvider == creditProvider;
   }
 
   @override
@@ -66,7 +65,7 @@ class CreditScore {
         lastUpdatedDate.hashCode ^
         nextUpdateDate.hashCode ^
         latestChange.hashCode ^
-        provider.hashCode;
+        creditProvider.hashCode;
   }
 }
 

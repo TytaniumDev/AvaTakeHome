@@ -1,4 +1,5 @@
 import 'package:ava_take_home/components/credit_score_header/credit_score_header_view_model.dart';
+import 'package:ava_take_home/model/credit_score_rating.dart';
 import 'package:ava_take_home/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,14 +20,6 @@ class CreditScoreHeaderViewData {
     required this.creditScoreChange,
     required this.creditProvider,
   });
-}
-
-enum CreditScoreRating {
-  exceptional,
-  veryGood,
-  good,
-  fair,
-  poor;
 }
 
 class CreditScoreHeaderView extends ConsumerWidget {

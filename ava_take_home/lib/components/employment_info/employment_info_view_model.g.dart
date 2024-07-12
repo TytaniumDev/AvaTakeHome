@@ -7,7 +7,7 @@ part of 'employment_info_view_model.dart';
 // **************************************************************************
 
 String _$employmentInfoViewModelHash() =>
-    r'212f27bffc15564d9a92d2e46b7d6732c2ca3ede';
+    r'c761666879499e8e0105562b17e07f4e69052cf7';
 
 /// See also [EmploymentInfoViewModel].
 @ProviderFor(EmploymentInfoViewModel)

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:ava_take_home/model/employment_info.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +13,7 @@ part 'employment_info_repository.g.dart';
 @riverpod
 class EmploymentInfoRepository extends _$EmploymentInfoRepository {
   @override
-  Future<EmploymentInfo> build() {
+  FutureOr<EmploymentInfo> build() {
     return ref.watch(employmentInfoServiceImplProvider).fetchEmploymentInfo();
   }
 
@@ -24,7 +27,7 @@ class EmploymentInfoRepository extends _$EmploymentInfoRepository {
 /// The interface for a service that can perform CRUD operations on
 /// [EmploymentInfo].
 abstract class EmploymentInfoService {
-  Future<EmploymentInfo> fetchEmploymentInfo();
+  FutureOr<EmploymentInfo> fetchEmploymentInfo();
   Future<void> updateEmploymentInfo(EmploymentInfo employmentInfo);
 }
 
@@ -47,8 +50,30 @@ class LocalEmploymentInfo extends _$LocalEmploymentInfo
     implements EmploymentInfoService {
   static const _employmentInfoKey = 'employmentInfoJson';
 
+  /// To simplify this project, assume that the user must have previously
+  /// entered their employment info somewhere in the onboarding flow.
+  ///
+  /// This initial employment info represents the info we would get back from the
+  /// server, assuming the above happened.
+  final _initialEmploymentInfo = EmploymentInfo(
+    employmentType: EmploymentType.fullTime,
+    employer: 'Apple Inc',
+    jobTitle: 'Software engineer',
+    grossAnnualIncome: 150000,
+    payFrequency: PayFrequency.biweekly,
+    nextPayday: DateTime.utc(2023, DateTime.september, 22),
+    isPayDirectDeposit: true,
+    employerAddress: 'Apple One Apple Park Way, Cupertino, CA 95014',
+    // In real code we wouldn't be subtracting arbitrary time from the current
+    // time to understand the user's time with their employer.
+    //
+    // Because this is a demo project and I'm trying to match the UI, this
+    // is a bit of a hack to get the UI to display 1 year 3 months.
+    employerStartDate: Jiffy.now().subtract(years: 1, months: 3).dateTime,
+  );
+
   @override
-  FutureOr<EmploymentInfo> build() {
+  FutureOr<EmploymentInfo> build() async {
     return fetchEmploymentInfo();
   }
 
@@ -57,15 +82,16 @@ class LocalEmploymentInfo extends _$LocalEmploymentInfo
     final prefs = await SharedPreferences.getInstance();
     final employmentInfoJson = prefs.getString(_employmentInfoKey);
     if (employmentInfoJson == null) {
-      return Future.error('Employment info JSON not found');
+      await updateEmploymentInfo(_initialEmploymentInfo);
+      return _initialEmploymentInfo;
     }
-    return EmploymentInfo.fromJson(employmentInfoJson);
+    return EmploymentInfo.fromJson(jsonDecode(employmentInfoJson));
   }
 
   @override
   Future<void> updateEmploymentInfo(EmploymentInfo employmentInfo) async {
     state = AsyncValue.data(employmentInfo);
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(_employmentInfoKey, employmentInfo.toJson());
+    prefs.setString(_employmentInfoKey, jsonEncode(employmentInfo));
   }
 }

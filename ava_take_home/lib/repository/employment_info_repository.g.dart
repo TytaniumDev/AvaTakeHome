@@ -27,7 +27,7 @@ final employmentInfoServiceImplProvider =
 typedef EmploymentInfoServiceImplRef
     = AutoDisposeProviderRef<EmploymentInfoService>;
 String _$employmentInfoRepositoryHash() =>
-    r'e87b12a435e447b012fbcee860f3a80a364b5a95';
+    r'f046c53e6658ee703916da3c174415b556f9d0bf';
 
 /// The public repository that allows CRUD operations on [EmploymentInfo].
 ///
@@ -48,7 +48,7 @@ final employmentInfoRepositoryProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$EmploymentInfoRepository = AutoDisposeAsyncNotifier<EmploymentInfo>;
 String _$localEmploymentInfoHash() =>
-    r'7bcb34157bb043f7aa99ae15fab60394d4bca3df';
+    r'8332e819a866c099c2a2194d62364d6dc3ce694e';
 
 /// An implementation of a [EmploymentInfoService] that uses Shared Preferences
 /// to store the [EmploymentInfo].

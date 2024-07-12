@@ -44,7 +44,9 @@ class EmploymentInfoView extends ConsumerWidget {
       children: [
         Expanded(
           child: switch (viewData) {
-            AsyncData(:final value) => const Text('We got data'),
+            AsyncData(:final value) => Text(
+                'We got data. Time with employer:\nYears: ${value.timeWithEmployerYears}, Months: ${value.timeWithEmployerMonths}',
+              ),
             AsyncValue(:final error?) => Text('We got error: $error'),
             _ => const CircularProgressIndicator(),
           },

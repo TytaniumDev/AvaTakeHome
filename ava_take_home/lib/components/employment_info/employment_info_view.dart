@@ -29,6 +29,7 @@ class _EmploymentInfoViewState extends State<EmploymentInfoView> {
   final _formKey = GlobalKey<FormState>();
 
   bool _inEditMode = false;
+  bool _inputsAreValid = true;
 
   @override
   Widget build(BuildContext context) {
@@ -45,39 +46,62 @@ class _EmploymentInfoViewState extends State<EmploymentInfoView> {
               child: _EmploymentInfoForm(
                 formKey: _formKey,
                 inEditMode: _inEditMode,
+                onFormChanged: (isValid) {
+                  setState(() {
+                    _inputsAreValid = isValid;
+                  });
+                },
               ),
             ),
-            _EditModeAnimatedSwitcher(
-              viewModeChild: Column(
+            Padding(
+              padding: const EdgeInsets.only(top: 12.0, bottom: 12),
+              child: Column(
                 children: [
-                  OutlinedButton(
-                    onPressed: () {
-                      setState(() {
-                        _inEditMode = !_inEditMode;
-                      });
-                    },
-                    child: const Text('Edit'),
+                  _EditModeAnimatedSwitcher(
+                    viewModeChild: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: OutlinedButton(
+                        onPressed: () {
+                          setState(() {
+                            _inEditMode = !_inEditMode;
+                          });
+                        },
+                        child: const Text('Edit'),
+                      ),
+                    ),
+                    editModeChild: const SizedBox(
+                      height: 0,
+                      width: double.infinity,
+                    ),
+                    inEditMode: _inEditMode,
                   ),
-                  const SizedBox(height: 8),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.pushReplacement(HomePage.route);
-                    },
-                    child: const Text('Confirm'),
+                  _EditModeAnimatedSwitcher(
+                    viewModeChild: Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            context.pushReplacement(HomePage.route);
+                          },
+                          child: const Text('Confirm'),
+                        ),
+                      ],
+                    ),
+                    editModeChild: ElevatedButton(
+                      onPressed: _formKey.currentState == null ||
+                              _formKey.currentState!.validate()
+                          ? () {
+                              setState(() {
+                                _inEditMode = !_inEditMode;
+                              });
+                            }
+                          : null,
+                      child: const Text('Continue'),
+                    ),
+                    inEditMode: _inEditMode,
                   ),
                 ],
               ),
-              editModeChild: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _inEditMode = !_inEditMode;
-                  });
-                },
-                child: const Text('Continue'),
-              ),
-              inEditMode: _inEditMode,
             ),
-            const SizedBox(height: 4),
           ],
         ),
       ),
@@ -132,7 +156,6 @@ class _Header extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-     
         ],
       ),
       inEditMode: inEditMode,
@@ -146,10 +169,12 @@ class _Header extends StatelessWidget {
 class _EmploymentInfoForm extends ConsumerWidget {
   final GlobalKey<FormState> formKey;
   final bool inEditMode;
+  final Function(bool isValid) onFormChanged;
 
   const _EmploymentInfoForm({
     required this.formKey,
     required this.inEditMode,
+    required this.onFormChanged,
   });
 
   @override
@@ -169,6 +194,13 @@ class _EmploymentInfoForm extends ConsumerWidget {
 
     final currencyFormat = NumberFormat.simpleCurrency(decimalDigits: 0);
     final currencyEditFormat = NumberFormat.decimalPattern();
+
+    notEmptyValidator(String? value) {
+      if (value == null || value.isEmpty) {
+        return 'Please enter some text';
+      }
+      return null;
+    }
 
     return viewData.when(
       skipLoadingOnReload: true,
@@ -205,6 +237,7 @@ class _EmploymentInfoForm extends ConsumerWidget {
             info: viewData.employer,
             editWidget: TextFormField(
               initialValue: viewData.employer,
+              validator: notEmptyValidator,
               autofillHints: const [AutofillHints.organizationName],
               textCapitalization: TextCapitalization.words,
               onFieldSubmitted: (text) => viewModel.updateEmployer(text),
@@ -216,6 +249,7 @@ class _EmploymentInfoForm extends ConsumerWidget {
             info: viewData.jobTitle,
             editWidget: TextFormField(
               initialValue: viewData.jobTitle,
+              validator: notEmptyValidator,
               autofillHints: const [AutofillHints.jobTitle],
               textCapitalization: TextCapitalization.words,
               onFieldSubmitted: (text) => viewModel.updateJobTitle(text),
@@ -235,6 +269,7 @@ class _EmploymentInfoForm extends ConsumerWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
+              validator: notEmptyValidator,
               initialValue:
                   currencyEditFormat.format(viewData.grossAnnualIncome),
               keyboardType: TextInputType.number,
@@ -273,6 +308,7 @@ class _EmploymentInfoForm extends ConsumerWidget {
               title: 'Employer address',
               info: viewData.employerAddress,
               editWidget: TextFormField(
+                validator: notEmptyValidator,
                 initialValue: viewData.employerAddress,
                 maxLines: null,
                 autofillHints: const [AutofillHints.fullStreetAddress],
@@ -448,6 +484,7 @@ class _EmploymentInfoForm extends ConsumerWidget {
         return _ScrollingForm(
           formKey: formKey,
           formWidgets: formWidgets,
+          onFormChanged: onFormChanged,
         );
       },
     );
@@ -455,14 +492,16 @@ class _EmploymentInfoForm extends ConsumerWidget {
 }
 
 class _ScrollingForm extends StatefulWidget {
+  final GlobalKey<FormState> formKey;
+  final List<Widget> formWidgets;
+  final Function(bool isValid) onFormChanged;
+
   const _ScrollingForm({
     super.key,
     required this.formKey,
     required this.formWidgets,
+    required this.onFormChanged,
   });
-
-  final GlobalKey<FormState> formKey;
-  final List<Widget> formWidgets;
 
   @override
   State<_ScrollingForm> createState() => _ScrollingFormState();
@@ -475,6 +514,10 @@ class _ScrollingFormState extends State<_ScrollingForm> {
   Widget build(BuildContext context) {
     return Form(
       key: widget.formKey,
+      autovalidateMode: AutovalidateMode.always,
+      onChanged: () {
+        widget.onFormChanged(widget.formKey.currentState?.validate() ?? false);
+      },
       child: AutofillGroup(
         child: FadingEdgeScrollView.fromScrollView(
           child: AlignedGridView.extent(
@@ -588,7 +631,7 @@ class _EditModeAnimatedSwitcher extends StatelessWidget {
       duration: _switchModeAnimationDuration,
       firstCurve: Curves.easeOut,
       secondCurve: Curves.easeIn,
-      sizeCurve: Curves.easeInOut,
+      sizeCurve: Curves.linear,
       firstChild: viewModeChild,
       secondChild: editModeChild,
       crossFadeState:

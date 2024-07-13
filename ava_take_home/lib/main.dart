@@ -36,10 +36,7 @@ class AvaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Ava Take Home',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.avaPrimary),
-        useMaterial3: true,
-      ),
+      theme: avaTheme,
       routerConfig: _router,
     );
   }

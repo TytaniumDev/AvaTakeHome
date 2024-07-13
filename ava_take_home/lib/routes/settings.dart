@@ -12,6 +12,7 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.manilla,
+        scrolledUnderElevation: 0,
       ),
       body: const SafeArea(child: EmploymentInfoView()),
       backgroundColor: AppColors.manilla,

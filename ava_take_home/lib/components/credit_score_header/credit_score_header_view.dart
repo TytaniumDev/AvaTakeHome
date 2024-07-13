@@ -60,7 +60,7 @@ class CreditScoreHeaderView extends ConsumerWidget {
                               //TODO get color from theme
                               color: Color(0xFF2A1E39),
                               fontSize: 16,
-                              fontFamily: 'At Hauss',
+                              
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -77,7 +77,7 @@ class CreditScoreHeaderView extends ConsumerWidget {
                           //TODO get color from theme
                           color: AppColors.textLight,
                           fontSize: 14,
-                          fontFamily: 'At Hauss',
+                          
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -88,7 +88,7 @@ class CreditScoreHeaderView extends ConsumerWidget {
                     style: const TextStyle(
                       color: AppColors.lightPurple,
                       fontSize: 12,
-                      fontFamily: 'At Hauss',
+                      
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0.12,
                     ),
@@ -129,7 +129,7 @@ class ScoreChangeChip extends StatelessWidget {
           // TODO: Get color from theme
           color: Colors.white,
           fontSize: 14,
-          fontFamily: 'At Hauss',
+          
           fontWeight: FontWeight.w600,
         ),
       ),

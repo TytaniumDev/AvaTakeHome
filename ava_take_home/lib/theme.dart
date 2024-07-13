@@ -1,5 +1,87 @@
 import 'package:flutter/material.dart';
 
+final avaTheme = ThemeData(
+  colorScheme: ColorScheme.fromSeed(seedColor: AppColors.avaPrimary),
+  useMaterial3: true,
+  inputDecorationTheme: _inputDecorationTheme,
+  dropdownMenuTheme: DropdownMenuThemeData(
+    inputDecorationTheme: _inputDecorationTheme,
+    textStyle: const TextStyle(
+      color: AppColors.textPrimaryDark,
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+    ),
+    menuStyle: MenuStyle(
+      backgroundColor: WidgetStateProperty.all(AppColors.backgroundWhite),
+    ),
+  ),
+  menuButtonTheme: MenuButtonThemeData(
+    style: MenuItemButton.styleFrom(
+      backgroundColor: AppColors.backgroundWhite,
+      textStyle: const TextStyle(
+        color: AppColors.textPrimaryDark,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+      ),
+    ),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      minimumSize: const Size(double.infinity, 44),
+      backgroundColor: AppColors.avaPrimary,
+      foregroundColor: AppColors.textWhite,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(12),
+        ),
+      ),
+      elevation: 0,
+      textStyle: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+  ),
+  outlinedButtonTheme: OutlinedButtonThemeData(
+    style: OutlinedButton.styleFrom(
+      minimumSize: const Size(double.infinity, 44),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(12),
+        ),
+      ),
+      elevation: 0,
+      textStyle: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+  ),
+  filledButtonTheme: FilledButtonThemeData(
+    style: FilledButton.styleFrom(
+      minimumSize: const Size(double.infinity, 44),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(12),
+        ),
+      ),
+      elevation: 0,
+      textStyle: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+  ),
+  radioTheme: RadioThemeData(
+    fillColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        return AppColors.avaPrimary;
+      }
+      return AppColors.borderColor;
+    }),
+  ),
+);
+
 abstract class AppColors {
   static const Color avaDark = Color(0xff2a1e39);
   static const Color avaPrimary = Color(0xff420085);
@@ -20,3 +102,31 @@ abstract class AppColors {
   static const Color textPrimaryDark = Color(0xff2a1e39);
   static const Color textWhite = Color(0xffffffff);
 }
+
+const _inputDecorationTheme = InputDecorationTheme(
+  filled: true,
+  fillColor: AppColors.backgroundWhite,
+  enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: AppColors.borderColor),
+    borderRadius: BorderRadius.all(Radius.circular(12)),
+  ),
+  border: OutlineInputBorder(
+    borderSide: BorderSide(color: AppColors.borderColor),
+    borderRadius: BorderRadius.all(Radius.circular(12)),
+  ),
+  labelStyle: TextStyle(
+    color: AppColors.textPrimaryDark,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  ),
+  helperStyle: TextStyle(
+    color: AppColors.textPrimaryDark,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  ),
+  hintStyle: TextStyle(
+    color: AppColors.textPrimaryDark,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  ),
+);

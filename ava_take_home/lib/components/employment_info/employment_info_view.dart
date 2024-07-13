@@ -1,12 +1,16 @@
 import 'package:ava_take_home/components/employment_info/employment_info_view_model.dart';
 import 'package:ava_take_home/model/employment_info.dart';
+import 'package:ava_take_home/routes/home_page.dart';
 import 'package:ava_take_home/theme.dart';
+import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 
@@ -28,41 +32,54 @@ class _EmploymentInfoViewState extends State<EmploymentInfoView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        children: [
-          // The padding between the header and form contents are contained
-          // in the _Header widget to provide for a better looking animation.
-          _Header(inEditMode: _inEditMode),
-          Expanded(
-            child: _EmploymentInfoForm(
-              formKey: _formKey,
-              inEditMode: _inEditMode,
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                _inEditMode = !_inEditMode;
-              });
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.avaPrimary,
-              elevation: 0,
-            ),
-            child: const Text(
-              'Swap state',
-              style: TextStyle(
-                color: AppColors.textWhite,
-                fontSize: 16,
-                fontFamily: 'At Hauss TRIAL',
-                fontWeight: FontWeight.w600,
+    return Center(
+      child: Container(
+        width: 640,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            // The padding between the header and form contents are contained
+            // in the _Header widget to provide for a better looking animation.
+            _Header(inEditMode: _inEditMode),
+            Expanded(
+              child: _EmploymentInfoForm(
+                formKey: _formKey,
+                inEditMode: _inEditMode,
               ),
             ),
-          ),
-        ],
+            _EditModeAnimatedSwitcher(
+              viewModeChild: Column(
+                children: [
+                  OutlinedButton(
+                    onPressed: () {
+                      setState(() {
+                        _inEditMode = !_inEditMode;
+                      });
+                    },
+                    child: const Text('Edit'),
+                  ),
+                  const SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.pushReplacement(HomePage.route);
+                    },
+                    child: const Text('Confirm'),
+                  ),
+                ],
+              ),
+              editModeChild: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _inEditMode = !_inEditMode;
+                  });
+                },
+                child: const Text('Continue'),
+              ),
+              inEditMode: _inEditMode,
+            ),
+            const SizedBox(height: 4),
+          ],
+        ),
       ),
     );
   }
@@ -74,7 +91,7 @@ class _EmploymentInfoViewState extends State<EmploymentInfoView> {
 class _Header extends StatelessWidget {
   final bool inEditMode;
 
-  const _Header({super.key, required this.inEditMode});
+  const _Header({required this.inEditMode});
 
   @override
   Widget build(BuildContext context) {
@@ -97,11 +114,9 @@ class _Header extends StatelessWidget {
             style: TextStyle(
               color: AppColors.textLight,
               fontSize: 16,
-              fontFamily: 'At Hauss TRIAL',
               fontWeight: FontWeight.w400,
             ),
           ),
-          SizedBox(height: 28),
         ],
       ),
       editModeChild: const Column(
@@ -117,7 +132,7 @@ class _Header extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 28),
+     
         ],
       ),
       inEditMode: inEditMode,
@@ -133,7 +148,6 @@ class _EmploymentInfoForm extends ConsumerWidget {
   final bool inEditMode;
 
   const _EmploymentInfoForm({
-    super.key,
     required this.formKey,
     required this.inEditMode,
   });
@@ -141,6 +155,14 @@ class _EmploymentInfoForm extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const paydayDateFormat = 'MMM do, yyyy [(]EEEE[)]';
+    const expandArrow = Icon(
+      Icons.keyboard_arrow_down_rounded,
+      color: AppColors.textLight,
+    );
+    const collapseArrow = Icon(
+      Icons.keyboard_arrow_up_rounded,
+      color: AppColors.textLight,
+    );
 
     final viewData = ref.watch(employmentInfoViewModelProvider);
     final viewModel = ref.read(employmentInfoViewModelProvider.notifier);
@@ -149,10 +171,13 @@ class _EmploymentInfoForm extends ConsumerWidget {
     final currencyEditFormat = NumberFormat.decimalPattern();
 
     return viewData.when(
-      error: (error, stack) => Text('Error: $error\n$stack'),
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      skipLoadingOnReload: true,
+      error: (error, stack) {
+        return Text('Error: $error\n$stack');
+      },
+      loading: () {
+        return const Center(child: CircularProgressIndicator());
+      },
       data: (viewData) {
         final formWidgets = [
           _AnimatedInfoField(
@@ -162,6 +187,8 @@ class _EmploymentInfoForm extends ConsumerWidget {
             editWidget: DropdownMenu(
               expandedInsets: EdgeInsets.zero,
               initialSelection: viewData.employmentType,
+              trailingIcon: expandArrow,
+              selectedTrailingIcon: collapseArrow,
               onSelected: (type) =>
                   type != null ? viewModel.updateEmploymentType(type) : {},
               dropdownMenuEntries: EmploymentType.values.map((type) {
@@ -205,7 +232,6 @@ class _EmploymentInfoForm extends ConsumerWidget {
                 suffixStyle: const TextStyle(
                   color: AppColors.textLight,
                   fontSize: 16,
-                  fontFamily: 'At Hauss TRIAL',
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -226,6 +252,8 @@ class _EmploymentInfoForm extends ConsumerWidget {
             title: 'Pay frequency',
             info: viewData.payFrequency.toDisplayString(),
             editWidget: DropdownMenu(
+              trailingIcon: expandArrow,
+              selectedTrailingIcon: collapseArrow,
               expandedInsets: EdgeInsets.zero,
               initialSelection: viewData.payFrequency,
               onSelected: (type) =>
@@ -238,17 +266,21 @@ class _EmploymentInfoForm extends ConsumerWidget {
               }).toList(),
             ),
           ),
-          _AnimatedInfoField(
-            inEditMode: inEditMode,
-            title: 'Employer address',
-            info: viewData.employerAddress,
-            editWidget: TextFormField(
-              initialValue: viewData.employerAddress,
-              maxLines: null,
-              autofillHints: const [AutofillHints.fullStreetAddress],
-              keyboardType: TextInputType.streetAddress,
-              textCapitalization: TextCapitalization.words,
-              onFieldSubmitted: (text) => viewModel.updateEmployerAddress(text),
+          Container(
+            constraints: BoxConstraints(minHeight: inEditMode ? 96 : 44),
+            child: _AnimatedInfoField(
+              inEditMode: inEditMode,
+              title: 'Employer address',
+              info: viewData.employerAddress,
+              editWidget: TextFormField(
+                initialValue: viewData.employerAddress,
+                maxLines: null,
+                autofillHints: const [AutofillHints.fullStreetAddress],
+                keyboardType: TextInputType.streetAddress,
+                textCapitalization: TextCapitalization.words,
+                onFieldSubmitted: (text) =>
+                    viewModel.updateEmployerAddress(text),
+              ),
             ),
           ),
           _AnimatedInfoField(
@@ -261,6 +293,8 @@ class _EmploymentInfoForm extends ConsumerWidget {
               children: [
                 Expanded(
                   child: DropdownMenu(
+                    trailingIcon: expandArrow,
+                    selectedTrailingIcon: collapseArrow,
                     expandedInsets: EdgeInsets.zero,
                     initialSelection: viewData.timeWithEmployerYears,
                     onSelected: (type) => type != null
@@ -279,6 +313,8 @@ class _EmploymentInfoForm extends ConsumerWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: DropdownMenu(
+                    trailingIcon: expandArrow,
+                    selectedTrailingIcon: collapseArrow,
                     expandedInsets: EdgeInsets.zero,
                     initialSelection: viewData.timeWithEmployerMonths,
                     onSelected: (type) => type != null
@@ -304,7 +340,15 @@ class _EmploymentInfoForm extends ConsumerWidget {
                 .format(pattern: paydayDateFormat),
             editWidget: OutlinedButton(
               style: OutlinedButton.styleFrom(
-                elevation: 0,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
+                backgroundColor: AppColors.backgroundWhite,
+                side: const BorderSide(color: AppColors.borderColor),
+                textStyle: const TextStyle(
+                  color: AppColors.textPrimaryDark,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
               onPressed: () async {
                 final DateTime? selectedDate = await showDatePicker(
@@ -319,53 +363,81 @@ class _EmploymentInfoForm extends ConsumerWidget {
                   viewModel.updateNextPayday(selectedDate);
                 }
               },
-              child: Text(
-                Jiffy.parseFromDateTime(viewData.nextPayday)
-                    .format(pattern: paydayDateFormat),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    Jiffy.parseFromDateTime(viewData.nextPayday)
+                        .format(pattern: paydayDateFormat),
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                      color: AppColors.textPrimaryDark,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SvgPicture.asset(
+                    'assets/icons/calendar.svg',
+                    theme: const SvgTheme(currentColor: AppColors.textLight),
+                  ),
+                ],
               ),
             ),
           ),
           _AnimatedInfoField(
             inEditMode: inEditMode,
-            title: 'Is your pay a direct deposit',
+            title: 'Is your pay a direct deposit?',
             info: viewData.isPayDirectDeposit ? 'Yes' : 'No',
+            // TODO The radio buttons don't quite match spec
             editWidget: Row(
               children: [
-                Radio(
-                  value: true,
-                  groupValue: viewData.isPayDirectDeposit,
-                  onChanged: (value) {
-                    if (value != null) {
-                      viewModel.updateIsPayDirectDeposit(value);
-                    }
-                  },
-                ),
-                const Text(
-                  'Yes',
-                  style: TextStyle(
-                    color: AppColors.textPrimaryDark,
-                    fontSize: 16,
-                    fontFamily: 'At Hauss TRIAL',
-                    fontWeight: FontWeight.w400,
+                GestureDetector(
+                  onTap: () => viewModel.updateIsPayDirectDeposit(true),
+                  child: Row(
+                    children: [
+                      Radio.adaptive(
+                        value: true,
+                        groupValue: viewData.isPayDirectDeposit,
+                        onChanged: (value) {
+                          if (value != null) {
+                            viewModel.updateIsPayDirectDeposit(value);
+                          }
+                        },
+                      ),
+                      const Text(
+                        'Yes',
+                        style: TextStyle(
+                          color: AppColors.textPrimaryDark,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(width: 60),
-                Radio(
-                  value: false,
-                  groupValue: viewData.isPayDirectDeposit,
-                  onChanged: (value) {
-                    if (value != null) {
-                      viewModel.updateIsPayDirectDeposit(value);
-                    }
-                  },
-                ),
-                const Text(
-                  'No',
-                  style: TextStyle(
-                    color: AppColors.textPrimaryDark,
-                    fontSize: 16,
-                    fontFamily: 'At Hauss TRIAL',
-                    fontWeight: FontWeight.w400,
+                GestureDetector(
+                  onTap: () => viewModel.updateIsPayDirectDeposit(false),
+                  child: Row(
+                    children: [
+                      Radio.adaptive(
+                        value: false,
+                        groupValue: viewData.isPayDirectDeposit,
+                        onChanged: (value) {
+                          if (value != null) {
+                            viewModel.updateIsPayDirectDeposit(value);
+                          }
+                        },
+                      ),
+                      const Text(
+                        'No',
+                        style: TextStyle(
+                          color: AppColors.textPrimaryDark,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -373,21 +445,51 @@ class _EmploymentInfoForm extends ConsumerWidget {
           ),
         ];
 
-        return Form(
-          key: formKey,
-          child: AutofillGroup(
-            child: AlignedGridView.extent(
-              maxCrossAxisExtent: 400,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              itemCount: formWidgets.length,
-              itemBuilder: (BuildContext context, int index) {
-                return formWidgets[index];
-              },
-            ),
-          ),
+        return _ScrollingForm(
+          formKey: formKey,
+          formWidgets: formWidgets,
         );
       },
+    );
+  }
+}
+
+class _ScrollingForm extends StatefulWidget {
+  const _ScrollingForm({
+    super.key,
+    required this.formKey,
+    required this.formWidgets,
+  });
+
+  final GlobalKey<FormState> formKey;
+  final List<Widget> formWidgets;
+
+  @override
+  State<_ScrollingForm> createState() => _ScrollingFormState();
+}
+
+class _ScrollingFormState extends State<_ScrollingForm> {
+  final scrollController = ScrollController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: widget.formKey,
+      child: AutofillGroup(
+        child: FadingEdgeScrollView.fromScrollView(
+          child: AlignedGridView.extent(
+            padding: const EdgeInsets.only(top: 28, bottom: 4),
+            controller: scrollController,
+            maxCrossAxisExtent: 400,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            itemCount: widget.formWidgets.length,
+            itemBuilder: (BuildContext context, int index) {
+              return widget.formWidgets[index];
+            },
+          ),
+        ),
+      ),
     );
   }
 }
@@ -398,22 +500,22 @@ class _AnimatedInfoField extends StatelessWidget {
   static const _viewModeTitleTextStyle = TextStyle(
     color: AppColors.textLight,
     fontSize: 12,
-    fontFamily: 'At Hauss TRIAL',
     fontWeight: FontWeight.w400,
     letterSpacing: 0.12,
   );
   static const _viewModeInfoTextStyle = TextStyle(
     color: AppColors.textPrimaryDark,
     fontSize: 16,
-    fontFamily: 'At Hauss TRIAL',
     fontWeight: FontWeight.w400,
   );
   static const _editModeTitleTextStyle = TextStyle(
     color: AppColors.textPrimaryDark,
     fontSize: 14,
-    fontFamily: 'At Hauss TRIAL',
     fontWeight: FontWeight.w600,
   );
+
+  static const _viewModeMinHeight = 44.0;
+  static const _editModeMinHeight = 72.0;
 
   final bool inEditMode;
   final String title;
@@ -421,7 +523,6 @@ class _AnimatedInfoField extends StatelessWidget {
   final Widget editWidget;
 
   const _AnimatedInfoField({
-    super.key,
     required this.inEditMode,
     required this.title,
     required this.info,
@@ -431,29 +532,36 @@ class _AnimatedInfoField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _EditModeAnimatedSwitcher(
-      viewModeChild: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            title,
-            style: _viewModeTitleTextStyle,
-          ),
-          Text(
-            info,
-            style: _viewModeInfoTextStyle,
-          ),
-        ],
+      viewModeChild: Container(
+        constraints: const BoxConstraints(minHeight: _viewModeMinHeight),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              title,
+              style: _viewModeTitleTextStyle,
+            ),
+            Text(
+              info,
+              style: _viewModeInfoTextStyle,
+            ),
+          ],
+        ),
       ),
-      editModeChild: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            title,
-            textAlign: TextAlign.start,
-            style: _editModeTitleTextStyle,
-          ),
-          editWidget,
-        ],
+      editModeChild: Container(
+        constraints: const BoxConstraints(minHeight: _editModeMinHeight),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              title,
+              textAlign: TextAlign.start,
+              style: _editModeTitleTextStyle,
+            ),
+            const SizedBox(height: 4),
+            editWidget,
+          ],
+        ),
       ),
       inEditMode: inEditMode,
     );
@@ -468,7 +576,6 @@ class _EditModeAnimatedSwitcher extends StatelessWidget {
   final bool inEditMode;
 
   const _EditModeAnimatedSwitcher({
-    super.key,
     required this.viewModeChild,
     required this.editModeChild,
     required this.inEditMode,

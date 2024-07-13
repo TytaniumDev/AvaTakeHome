@@ -124,7 +124,7 @@ class EmploymentInfoViewModel extends _$EmploymentInfoViewModel {
             Jiffy.now()
             .subtract(
                 years: years,
-                months: currentYearsOfEmployment.timeWithEmployerMonths)
+                months: currentYearsOfEmployment.timeWithEmployerMonths,)
             .dateTime,
       ),
     );

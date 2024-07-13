@@ -20,9 +20,8 @@ class HomePage extends StatelessWidget {
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,
-            fontFamily: 'At Hauss',
+            
             fontWeight: FontWeight.w600,
-            height: 0.09,
           ),
         ),
         centerTitle: true,

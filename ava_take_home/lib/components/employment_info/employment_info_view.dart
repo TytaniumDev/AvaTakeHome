@@ -2,6 +2,7 @@ import 'package:ava_take_home/components/employment_info/employment_info_view_mo
 import 'package:ava_take_home/model/employment_info.dart';
 import 'package:ava_take_home/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -139,10 +140,13 @@ class _EmploymentInfoForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const paydayDateFormat = 'MMM do, yyyy [(]EEEE[)]';
+
     final viewData = ref.watch(employmentInfoViewModelProvider);
     final viewModel = ref.read(employmentInfoViewModelProvider.notifier);
 
     final currencyFormat = NumberFormat.simpleCurrency(decimalDigits: 0);
+    final currencyEditFormat = NumberFormat.decimalPattern();
 
     return viewData.when(
       error: (error, stack) => Text('Error: $error\n$stack'),
@@ -172,31 +176,80 @@ class _EmploymentInfoForm extends ConsumerWidget {
             inEditMode: inEditMode,
             title: 'Employer',
             info: viewData.employer,
-            editWidget: const SizedBox(),
+            editWidget: TextFormField(
+              initialValue: viewData.employer,
+              autofillHints: const [AutofillHints.organizationName],
+              textCapitalization: TextCapitalization.words,
+              onFieldSubmitted: (text) => viewModel.updateEmployer(text),
+            ),
           ),
           _AnimatedInfoField(
             inEditMode: inEditMode,
             title: 'Job title',
             info: viewData.jobTitle,
-            editWidget: const SizedBox(),
+            editWidget: TextFormField(
+              initialValue: viewData.jobTitle,
+              autofillHints: const [AutofillHints.jobTitle],
+              textCapitalization: TextCapitalization.words,
+              onFieldSubmitted: (text) => viewModel.updateJobTitle(text),
+            ),
           ),
           _AnimatedInfoField(
             inEditMode: inEditMode,
             title: 'Gross annual income',
             info: '${currencyFormat.format(viewData.grossAnnualIncome)}/year',
-            editWidget: const SizedBox(),
+            editWidget: TextFormField(
+              decoration: InputDecoration(
+                prefixText: NumberFormat.compactSimpleCurrency().currencySymbol,
+                suffixText: '/year',
+                suffixStyle: const TextStyle(
+                  color: AppColors.textLight,
+                  fontSize: 16,
+                  fontFamily: 'At Hauss TRIAL',
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              initialValue:
+                  currencyEditFormat.format(viewData.grossAnnualIncome),
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                // Limit length to 18 to not go over the int limit.
+                LengthLimitingTextInputFormatter(18),
+              ],
+              onFieldSubmitted: (text) =>
+                  viewModel.updateGrossAnnualIncome(int.parse(text)),
+            ),
           ),
           _AnimatedInfoField(
             inEditMode: inEditMode,
             title: 'Pay frequency',
             info: viewData.payFrequency.toDisplayString(),
-            editWidget: const SizedBox(),
+            editWidget: DropdownMenu(
+              expandedInsets: EdgeInsets.zero,
+              initialSelection: viewData.payFrequency,
+              onSelected: (type) =>
+                  type != null ? viewModel.updatePayFrequency(type) : {},
+              dropdownMenuEntries: PayFrequency.values.map((type) {
+                return DropdownMenuEntry(
+                  label: type.toDisplayString(),
+                  value: type,
+                );
+              }).toList(),
+            ),
           ),
           _AnimatedInfoField(
             inEditMode: inEditMode,
             title: 'Employer address',
             info: viewData.employerAddress,
-            editWidget: const SizedBox(),
+            editWidget: TextFormField(
+              initialValue: viewData.employerAddress,
+              maxLines: null,
+              autofillHints: const [AutofillHints.fullStreetAddress],
+              keyboardType: TextInputType.streetAddress,
+              textCapitalization: TextCapitalization.words,
+              onFieldSubmitted: (text) => viewModel.updateEmployerAddress(text),
+            ),
           ),
           _AnimatedInfoField(
             inEditMode: inEditMode,
@@ -204,33 +257,134 @@ class _EmploymentInfoForm extends ConsumerWidget {
             // TODO make this handle plurals
             info:
                 '${viewData.timeWithEmployerYears} year ${viewData.timeWithEmployerMonths} months',
-            editWidget: const SizedBox(),
+            editWidget: Row(
+              children: [
+                Expanded(
+                  child: DropdownMenu(
+                    expandedInsets: EdgeInsets.zero,
+                    initialSelection: viewData.timeWithEmployerYears,
+                    onSelected: (type) => type != null
+                        ? viewModel.updateTimeWithEmployerYears(type)
+                        : {},
+                    dropdownMenuEntries:
+                        List.generate(100, (number) => number).map((number) {
+                      return DropdownMenuEntry(
+                        // TODO Handle plurals
+                        label: '$number year',
+                        value: number,
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: DropdownMenu(
+                    expandedInsets: EdgeInsets.zero,
+                    initialSelection: viewData.timeWithEmployerMonths,
+                    onSelected: (type) => type != null
+                        ? viewModel.updateTimeWithEmployerMonths(type)
+                        : {},
+                    dropdownMenuEntries:
+                        List.generate(12, (number) => number).map((number) {
+                      return DropdownMenuEntry(
+                        // TODO Handle plurals
+                        label: '$number months',
+                        value: number,
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
           ),
           _AnimatedInfoField(
             inEditMode: inEditMode,
             title: 'Next payday',
             info: Jiffy.parseFromDateTime(viewData.nextPayday)
-                .format(pattern: 'MMM do, yyyy [(]EEEE[)]'),
-            editWidget: const SizedBox(),
+                .format(pattern: paydayDateFormat),
+            editWidget: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                elevation: 0,
+              ),
+              onPressed: () async {
+                final DateTime? selectedDate = await showDatePicker(
+                  context: context,
+                  // It's impossible to have a next payday in the past.
+                  firstDate: DateTime.now(),
+                  // The longest possible pay period option is one month,
+                  // so double that for some padding.
+                  lastDate: Jiffy.now().add(months: 2).dateTime,
+                );
+                if (selectedDate != null) {
+                  viewModel.updateNextPayday(selectedDate);
+                }
+              },
+              child: Text(
+                Jiffy.parseFromDateTime(viewData.nextPayday)
+                    .format(pattern: paydayDateFormat),
+              ),
+            ),
           ),
           _AnimatedInfoField(
             inEditMode: inEditMode,
             title: 'Is your pay a direct deposit',
             info: viewData.isPayDirectDeposit ? 'Yes' : 'No',
-            editWidget: const SizedBox(),
+            editWidget: Row(
+              children: [
+                Radio(
+                  value: true,
+                  groupValue: viewData.isPayDirectDeposit,
+                  onChanged: (value) {
+                    if (value != null) {
+                      viewModel.updateIsPayDirectDeposit(value);
+                    }
+                  },
+                ),
+                const Text(
+                  'Yes',
+                  style: TextStyle(
+                    color: AppColors.textPrimaryDark,
+                    fontSize: 16,
+                    fontFamily: 'At Hauss TRIAL',
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const SizedBox(width: 60),
+                Radio(
+                  value: false,
+                  groupValue: viewData.isPayDirectDeposit,
+                  onChanged: (value) {
+                    if (value != null) {
+                      viewModel.updateIsPayDirectDeposit(value);
+                    }
+                  },
+                ),
+                const Text(
+                  'No',
+                  style: TextStyle(
+                    color: AppColors.textPrimaryDark,
+                    fontSize: 16,
+                    fontFamily: 'At Hauss TRIAL',
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
+            ),
           ),
         ];
 
         return Form(
           key: formKey,
-          child: AlignedGridView.extent(
-            maxCrossAxisExtent: 400,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            itemCount: formWidgets.length,
-            itemBuilder: (BuildContext context, int index) {
-              return formWidgets[index];
-            },
+          child: AutofillGroup(
+            child: AlignedGridView.extent(
+              maxCrossAxisExtent: 400,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              itemCount: formWidgets.length,
+              itemBuilder: (BuildContext context, int index) {
+                return formWidgets[index];
+              },
+            ),
           ),
         );
       },

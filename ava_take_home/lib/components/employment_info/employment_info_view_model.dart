@@ -116,11 +116,30 @@ class EmploymentInfoViewModel extends _$EmploymentInfoViewModel {
     );
   }
 
-  void updateTimeWithEmployer(int years, int months) {
+  Future<void> updateTimeWithEmployerYears(int years) async {
+    final currentYearsOfEmployment = await future;
     _repository.updateEmploymentInfo(
       _latestEmploymentInfo.copyWith(
         employerStartDate:
-            Jiffy.now().subtract(years: years, months: months).dateTime,
+            Jiffy.now()
+            .subtract(
+                years: years,
+                months: currentYearsOfEmployment.timeWithEmployerMonths)
+            .dateTime,
+      ),
+    );
+  }
+
+  Future<void> updateTimeWithEmployerMonths(int months) async {
+    final currentYearsOfEmployment = await future;
+    _repository.updateEmploymentInfo(
+      _latestEmploymentInfo.copyWith(
+        employerStartDate: Jiffy.now()
+            .subtract(
+              years: currentYearsOfEmployment.timeWithEmployerYears,
+              months: months,
+            )
+            .dateTime,
       ),
     );
   }

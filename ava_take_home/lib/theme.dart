@@ -13,6 +13,8 @@ abstract class AppColors {
   static const Color lightPurple = Color(0xffa448ff);
   static const Color manilla = Color(0xfff2f0ed);
   static const Color okayOrange = Color(0xffff7e17);
+
+  // Text colors:
   static const Color textGreen = Color(0xff003928);
   static const Color textLight = Color(0xff736b7c);
   static const Color textPrimaryDark = Color(0xff2a1e39);

@@ -63,7 +63,7 @@ class LocalEmploymentInfo extends _$LocalEmploymentInfo
     payFrequency: PayFrequency.biweekly,
     nextPayday: DateTime.utc(2023, DateTime.september, 22),
     isPayDirectDeposit: true,
-    employerAddress: 'Apple One Apple Park Way, Cupertino, CA 95014',
+    employerAddress: 'Apple One Apple Park Way,\nCupertino, CA 95014',
     // In real code we wouldn't be subtracting arbitrary time from the current
     // time to understand the user's time with their employer.
     //

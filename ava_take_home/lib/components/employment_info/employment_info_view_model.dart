@@ -21,11 +21,16 @@ class EmploymentInfoViewModel extends _$EmploymentInfoViewModel {
     final employmentInfoModel = ref.watch(localEmploymentInfoProvider);
     _repository = ref.read(localEmploymentInfoProvider.notifier);
 
-    return switch (employmentInfoModel) {
-      AsyncData(:final value) => Future.value(_createFromModel(value)),
-      AsyncValue(:final error?) => Future.error('From the viewmodel: $error'),
-      _ => Future.error('Loading'),
-    };
+    return employmentInfoModel.when(
+      error: (error, stack) =>
+          Future.error('From the ViewModel: $error\n$stack'),
+      //TODO Figure out how to propogate loading state.
+      loading: () => Future.error('Loading'),
+      data: (model) {
+        _latestEmploymentInfo = model;
+        return Future.value(_createFromModel(model));
+      },
+    );
   }
 
   EmploymentInfoViewData _createFromModel(EmploymentInfo model) {
@@ -34,7 +39,7 @@ class EmploymentInfoViewModel extends _$EmploymentInfoViewModel {
     //
     // If this is an issue, some sort of refresh timer could be implemented,
     // or a push from a server, but both seem a bit overkill.
-    
+
     // Create Jiffy instances representing the start of each month for both
     // the current time and the date the user began employment with their
     // current employer.

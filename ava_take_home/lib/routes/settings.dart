@@ -1,4 +1,5 @@
 import 'package:ava_take_home/components/employment_info/employment_info_view.dart';
+import 'package:ava_take_home/theme.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -9,8 +10,11 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: AppColors.manilla,
+      ),
       body: const SafeArea(child: EmploymentInfoView()),
+      backgroundColor: AppColors.manilla,
     );
   }
 }

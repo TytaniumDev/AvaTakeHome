@@ -1,4 +1,5 @@
 import 'package:ava_take_home/components/credit_score_header/credit_score_header_view.dart';
+import 'package:ava_take_home/components/feedback_sheet/feedback_sheet_view.dart';
 import 'package:ava_take_home/routes/settings.dart';
 import 'package:ava_take_home/theme.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -20,7 +22,6 @@ class HomePage extends StatelessWidget {
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,
-            
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -32,6 +33,7 @@ class HomePage extends StatelessWidget {
           ),
           tooltip: "Settings",
           onPressed: () => context.go(SettingsPage.route),
+          
         ),
       ),
       backgroundColor: AppColors.manilla,

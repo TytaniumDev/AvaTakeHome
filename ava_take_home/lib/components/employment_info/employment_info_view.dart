@@ -1,4 +1,6 @@
+import 'package:ava_take_home/common/text_validators.dart';
 import 'package:ava_take_home/components/employment_info/employment_info_view_model.dart';
+import 'package:ava_take_home/components/feedback_sheet/feedback_sheet_view.dart';
 import 'package:ava_take_home/model/employment_info.dart';
 import 'package:ava_take_home/routes/home_page.dart';
 import 'package:ava_take_home/theme.dart';
@@ -80,7 +82,8 @@ class _EmploymentInfoViewState extends State<EmploymentInfoView> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            context.pushReplacement(HomePage.route);
+                            context.pop(HomePage.route);
+                            showFeedbackSheet(context);
                           },
                           child: const Text('Confirm'),
                         ),
@@ -194,13 +197,6 @@ class _EmploymentInfoForm extends ConsumerWidget {
 
     final currencyFormat = NumberFormat.simpleCurrency(decimalDigits: 0);
     final currencyEditFormat = NumberFormat.decimalPattern();
-
-    notEmptyValidator(String? value) {
-      if (value == null || value.isEmpty) {
-        return 'Please enter some text';
-      }
-      return null;
-    }
 
     return viewData.when(
       skipLoadingOnReload: true,

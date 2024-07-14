@@ -65,6 +65,7 @@ final avaTheme = ThemeData(
           Radius.circular(12),
         ),
       ),
+      backgroundColor: AppColors.avaPrimary,
       elevation: 0,
       textStyle: const TextStyle(
         fontSize: 16,

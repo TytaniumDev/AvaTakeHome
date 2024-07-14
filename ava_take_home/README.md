@@ -4,6 +4,9 @@ A new Flutter project.
 
 ## Problems in the spec
 
+### General
+* Font files weren't provided, so the look of the text won't be quite right. This introduces additional challenges as well, as the heights of symbols vary between fonts, and the Figma spec relies on the height of the symbols for some layouts. Pixel perfect precision couldn't be achieved because of this, but I got as close as I could through guesstimating.
+
 ### Home page
 * The progress ring in the header seems to be at a mystery value. It should be further along the track if it is showing the progress towards maximum credit score (850), and further back if it is showing the progress within the "Good" score bucket (661-780). I'm assuming it's meant to show progress towards maximum credit score, and went with that implementation instead.
 

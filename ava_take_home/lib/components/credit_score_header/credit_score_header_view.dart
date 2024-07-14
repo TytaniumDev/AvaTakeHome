@@ -34,14 +34,7 @@ class CreditScoreHeaderView extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: const ShapeDecoration(
-        color: AppColors.backgroundWhite,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(20),
-          ),
-        ),
-      ),
+      decoration: homePageCardBoxDecoration(borderRadius: 20),
       child: IntrinsicHeight(
         child: Row(
           children: [

@@ -1,6 +1,7 @@
 import 'package:ava_take_home/components/credit_factors/credit_factors_view.dart';
 import 'package:ava_take_home/components/credit_score_header/credit_score_header_view.dart';
 import 'package:ava_take_home/components/feedback_sheet/feedback_sheet_view.dart';
+import 'package:ava_take_home/components/open_credit_card_accounts_card/open_credit_card_accounts_card_view.dart';
 import 'package:ava_take_home/routes/settings.dart';
 import 'package:ava_take_home/theme.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
@@ -41,7 +42,7 @@ class HomePage extends StatelessWidget {
       body: const SafeArea(
         child: Column(
           children: [
-            HeaderChin(
+            _HeaderChin(
               child: CreditScoreHeaderView(),
             ),
             Expanded(
@@ -92,7 +93,7 @@ class __HomePageListState extends State<_HomePageList> {
           Container(
             width: 343,
             height: 261,
-            color: AppColors.backgroundWhite,
+            decoration: homePageCardBoxDecoration(),
           ),
         ],
       ),
@@ -109,20 +110,36 @@ class __HomePageListState extends State<_HomePageList> {
           CreditFactorsView(),
         ],
       ),
-      const Text(
-        'Account details',
-        style: TextStyle(
-          color: AppColors.textPrimaryDark,
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
-        ),
+      const Column(
+        children: [
+          Text(
+            'Account details',
+            style: TextStyle(
+              color: AppColors.textPrimaryDark,
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          
+        ],
       ),
-      const Text(
-        'Open credit card accounts',
-        style: TextStyle(
-          color: AppColors.textPrimaryDark,
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
+      const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Open credit card accounts',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                color: AppColors.textPrimaryDark,
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 20),
+            OpenCreditCardAccountsCardView(),
+          ],
         ),
       ),
     ];
@@ -131,6 +148,7 @@ class __HomePageListState extends State<_HomePageList> {
       child: MasonryGridView.extent(
         controller: scrollController,
         maxCrossAxisExtent: 640,
+        padding: const EdgeInsets.only(top: 32, bottom: 16),
         itemCount: listItems.length,
         itemBuilder: (context, index) {
           return listItems[index];
@@ -140,10 +158,10 @@ class __HomePageListState extends State<_HomePageList> {
   }
 }
 
-class HeaderChin extends StatelessWidget {
+class _HeaderChin extends StatelessWidget {
   final Widget child;
 
-  const HeaderChin({super.key, required this.child});
+  const _HeaderChin({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

@@ -113,10 +113,7 @@ class _CreditFactorCard extends StatelessWidget {
       height: 160,
       width: 144,
       padding: const EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 16),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-        color: AppColors.backgroundWhite,
-      ),
+      decoration: homePageCardBoxDecoration(borderRadius: 16),
       child: Column(
         children: [
           SizedBox(

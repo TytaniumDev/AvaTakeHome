@@ -12,14 +12,13 @@ class CreditScoreHeaderViewModel extends _$CreditScoreHeaderViewModel {
     final creditScoreModel = ref.watch(currentCreditScoreModelProvider);
 
     return CreditScoreHeaderViewData(
-      updatedDate: 'Updated Today | Next May 12',
+      updatedDate: creditScoreModel.lastUpdatedDate,
+      nextUpdateDate: creditScoreModel.nextUpdateDate,
       creditScore: creditScoreModel.currentScore,
       creditScoreRating:
           CreditScoreRating.fromCreditScore(creditScoreModel.currentScore),
-      creditScoreChange: 2,
-      creditProvider: 'Experian',
+      creditScoreChange: creditScoreModel.latestChange,
+      creditProvider: creditScoreModel.creditProvider,
     );
   }
-
-
 }

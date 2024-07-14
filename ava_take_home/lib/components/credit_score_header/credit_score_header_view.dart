@@ -1,21 +1,23 @@
 import 'package:ava_take_home/components/credit_score_header/credit_score_header_view_model.dart';
+import 'package:ava_take_home/model/credit_score.dart';
 import 'package:ava_take_home/model/credit_score_rating.dart';
 import 'package:ava_take_home/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jiffy/jiffy.dart';
 
 @immutable
 class CreditScoreHeaderViewData {
-  /// In real code this would go through a localization function.
-  final String updatedDate;
+  final DateTime updatedDate;
+  final DateTime nextUpdateDate;
   final int creditScore;
   final CreditScoreRating creditScoreRating;
   final int creditScoreChange;
-  /// In real code this would go through a localization function.
-  final String creditProvider;
+  final CreditProvider creditProvider;
 
   const CreditScoreHeaderViewData({
     required this.updatedDate,
+    required this.nextUpdateDate,
     required this.creditScore,
     required this.creditScoreRating,
     required this.creditScoreChange,
@@ -57,38 +59,42 @@ class CreditScoreHeaderView extends ConsumerWidget {
                           const Text(
                             'Credit Score',
                             style: TextStyle(
-                              //TODO get color from theme
-                              color: Color(0xFF2A1E39),
                               fontSize: 16,
-                              
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           const SizedBox(width: 8),
-                          ScoreChangeChip(
+                          _ScoreChangeChip(
                             scoreChange: viewData.creditScoreChange,
                           ),
                         ],
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        viewData.updatedDate,
+                        'Updated ${Jiffy.parseFromDateTime(viewData.updatedDate).fromNow()}',
                         style: const TextStyle(
                           //TODO get color from theme
                           color: AppColors.textLight,
                           fontSize: 14,
-                          
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Text(
+                        'Next ${Jiffy.parseFromDateTime(viewData.nextUpdateDate).format(pattern: 'MMM do')}',
+                        style: const TextStyle(
+                          //TODO get color from theme
+                          color: AppColors.textLight,
+                          fontSize: 14,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
                     ],
                   ),
                   Text(
-                    viewData.creditProvider,
+                    viewData.creditProvider.toDisplayString(),
                     style: const TextStyle(
                       color: AppColors.lightPurple,
                       fontSize: 12,
-                      
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0.12,
                     ),
@@ -96,13 +102,8 @@ class CreditScoreHeaderView extends ConsumerWidget {
                 ],
               ),
             ),
-            SizedBox(
-              height: 80,
-              width: 80,
-              child: Container(
-                color: Colors.red,
-              ),
-            ),
+            const SizedBox(width: 8),
+            const _CreditScoreCircle(),
           ],
         ),
       ),
@@ -110,29 +111,170 @@ class CreditScoreHeaderView extends ConsumerWidget {
   }
 }
 
-class ScoreChangeChip extends StatelessWidget {
+class _ScoreChangeChip extends StatelessWidget {
   final int scoreChange;
 
-  const ScoreChangeChip({super.key, required this.scoreChange});
+  const _ScoreChangeChip({super.key, required this.scoreChange});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
       decoration: ShapeDecoration(
-        color: scoreChange > 0 ? AppColors.avaSecondary : AppColors.badRed,
+        color: scoreChange >= 0 ? AppColors.avaSecondary : AppColors.badRed,
         shape: const StadiumBorder(),
       ),
       child: Text(
-        '${scoreChange > 0 ? '+' : '-'}${scoreChange}pts',
+        '${scoreChange >= 0 ? '+' : '-'}${scoreChange}pts',
         style: const TextStyle(
           // TODO: Get color from theme
           color: Colors.white,
           fontSize: 14,
-          
           fontWeight: FontWeight.w600,
         ),
       ),
     );
+  }
+}
+
+class _CreditScoreCircle extends ConsumerStatefulWidget {
+  const _CreditScoreCircle({super.key});
+
+  @override
+  ConsumerState<_CreditScoreCircle> createState() => _CreditScoreCircleState();
+}
+
+class _CreditScoreCircleState extends ConsumerState<_CreditScoreCircle> {
+  static const Duration animationDuration = Duration(milliseconds: 500);
+  static const Curve animationCurve = Curves.easeInOutQuart;
+
+  int? previousCreditScore;
+  late int currentCreditScore;
+
+  @override
+  void initState() {
+    super.initState();
+    currentCreditScore = ref.read(
+      creditScoreHeaderViewModelProvider
+          .select((viewModel) => viewModel.creditScore),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen(
+        creditScoreHeaderViewModelProvider.select(
+          (viewModel) => viewModel.creditScore,
+        ), (previousValue, newValue) {
+      setState(() {
+        previousCreditScore = previousValue;
+        currentCreditScore = newValue;
+      });
+    });
+    final creditScoreRating = ref.watch(
+      creditScoreHeaderViewModelProvider
+          .select((viewModel) => viewModel.creditScoreRating),
+    );
+
+    return Container(
+      constraints: const BoxConstraints(
+        minHeight: 72,
+        minWidth: 72,
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          RotatedBox(
+            quarterTurns: 2,
+            child: SizedBox(
+              height: 72,
+              width: 72,
+              child: TweenAnimationBuilder(
+                tween: Tween<double>(
+                  begin: _creditScorePercentage(
+                    previousCreditScore ?? currentCreditScore,
+                  ),
+                  end: _creditScorePercentage(currentCreditScore),
+                ),
+                duration: animationDuration,
+                curve: animationCurve,
+                builder: (context, value, _) {
+                  return CircularProgressIndicator(
+                    key: const ValueKey('CreditScoreCircle'),
+                    value: value,
+                    strokeWidth: 6,
+                    backgroundColor: AppColors.avaSecondaryLight,
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      AppColors.avaSecondary,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '$currentCreditScore',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 36,
+                  fontFamily: 'At Slam Cnd',
+                  fontWeight: FontWeight.w600,
+                  height: 1,
+                ),
+              ),
+              Text(
+                creditScoreRating.toDisplayString(),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 8,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Determines what "percentage" of a maximum credit score the current
+  /// [creditScore] is.
+  double _creditScorePercentage(int creditScore) {
+    const minCreditScore = CreditScore.min;
+    const maxCreditScore = CreditScore.max;
+    return (creditScore - minCreditScore) / (maxCreditScore - minCreditScore);
+  }
+}
+
+extension on CreditScoreRating {
+  String toDisplayString() {
+    switch (this) {
+      case CreditScoreRating.excellent:
+        return 'Excellent';
+      case CreditScoreRating.veryGood:
+        return 'Very good';
+      case CreditScoreRating.good:
+        return 'Good';
+      case CreditScoreRating.fair:
+        return 'Fair';
+      case CreditScoreRating.poor:
+        return 'Poor';
+    }
+  }
+}
+
+extension on CreditProvider {
+  String toDisplayString() {
+    switch (this) {
+      case CreditProvider.equifax:
+        return 'Equifax';
+      case CreditProvider.transunion:
+        return 'Transunion';
+      case CreditProvider.experian:
+        return 'Experian';
+    }
   }
 }

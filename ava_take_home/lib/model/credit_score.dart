@@ -1,8 +1,10 @@
-
 import 'package:flutter/foundation.dart';
 
 @immutable
 class CreditScore {
+  static const max = 850;
+  static const min = 300;
+
   /// The current credit score, as of [lastUpdatedDate].
   final int currentScore;
 

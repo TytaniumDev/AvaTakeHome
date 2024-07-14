@@ -4,6 +4,9 @@ A new Flutter project.
 
 ## Problems in the spec
 
+### Home page
+* The progress ring in the header seems to be at a mystery value. It should be further along the track if it is showing the progress towards maximum credit score (850), and further back if it is showing the progress within the "Good" score bucket (661-780). I'm assuming it's meant to show progress towards maximum credit score, and went with that implementation instead.
+
 ### Employment information page
  * Sept isn't a valid ICU time format (https://unicode-org.github.io/icu/userguide/format_parse/datetime/). I used MMM as it's as close as possible, giving "Sep" instead of "Sept" from the Figma spec. 
  * Ordering of the fields on the Edit employment information and Confirm employment information pages don't match, so I went with the ordering of the Confirm page to allow for nice animations between the two modes like requested ("Bonus points if you make the confirm and edit info screens as one screen.").

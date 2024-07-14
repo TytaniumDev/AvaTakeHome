@@ -7,7 +7,7 @@ part of 'credit_score_header_view_model.dart';
 // **************************************************************************
 
 String _$creditScoreHeaderViewModelHash() =>
-    r'0c416195a67a0c4143085facb4d4a35e3f8006c7';
+    r'a6068419cb0f4ddc6c753790839973dc946f3cc1';
 
 /// See also [CreditScoreHeaderViewModel].
 @ProviderFor(CreditScoreHeaderViewModel)

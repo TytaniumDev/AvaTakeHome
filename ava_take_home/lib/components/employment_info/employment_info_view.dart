@@ -504,7 +504,19 @@ class _ScrollingForm extends StatefulWidget {
 }
 
 class _ScrollingFormState extends State<_ScrollingForm> {
-  final scrollController = ScrollController();
+  late final ScrollController scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

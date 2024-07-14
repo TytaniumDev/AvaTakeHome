@@ -43,7 +43,7 @@ final creditScoreHistoryModelProvider =
 );
 
 typedef CreditScoreHistoryModelRef = AutoDisposeProviderRef<List<CreditScore>>;
-String _$demoCreditScoresHash() => r'9d49f0b093fbad73b3098a6715cf600d24e0b203';
+String _$demoCreditScoresHash() => r'fb0f7d54a4a3780008fc1623976269705ab918bf';
 
 /// See also [DemoCreditScores].
 @ProviderFor(DemoCreditScores)

@@ -21,3 +21,4 @@ A new Flutter project.
 * Localization/Internationlization. Strings would need to go through the intl package.
 * Proper Repository architecture that can use a shared interface but have different implementations (local storage, REST API, etc). I didn't have enough time to fully figure out how to do this as I haven't used Riverpod before, but I assume there's a way.
 * The last bit of polish on the animations. The text animations jump in location when the length of the text changes. I'd need to do some restructuring to fix this, but just don't have time.
+* Work with design/PM to figure out what the logic is for the chart widget. Right now it shows a horizontal line and left hand title every 50 credit score, but that can cause issues if very small or very large credit changes happen over 12 months.

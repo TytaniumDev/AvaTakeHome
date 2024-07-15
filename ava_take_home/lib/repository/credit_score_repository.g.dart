@@ -24,7 +24,7 @@ final currentCreditScoreModelProvider =
 
 typedef CurrentCreditScoreModelRef = AutoDisposeProviderRef<CreditScore>;
 String _$creditScoreHistoryModelHash() =>
-    r'aa6293bf1d25ea618fb65ad1343a9c70ad75bee8';
+    r'92501dd92891818595a33f3d3d354b4467d97c5e';
 
 /// Provides the history of all credit scores for this user, sorted by
 /// most recent first, oldest last.
@@ -44,7 +44,7 @@ final creditScoreHistoryModelProvider =
 
 typedef CreditScoreHistoryModelRef = AutoDisposeProviderRef<List<CreditScore>>;
 String _$creditScoresForLastTwelveMonthsHash() =>
-    r'84beeedde81adaa829fdc26a7ca040825b30c0f0';
+    r'35b864d3ce7f0ca99c8680f967bb0dd24532533f';
 
 /// Provides the history of the credit scores over the last twelve months,
 /// one per month, with the latest scores first.
@@ -71,7 +71,7 @@ final creditScoresForLastTwelveMonthsProvider =
 
 typedef CreditScoresForLastTwelveMonthsRef
     = AutoDisposeProviderRef<List<CreditScore>>;
-String _$demoCreditScoresHash() => r'2f919053152b359009e021c33affcdf57d2ec06b';
+String _$demoCreditScoresHash() => r'462a2fc64577a4e79f9c0fcb8226e4af5ed24532';
 
 /// See also [DemoCreditScores].
 @ProviderFor(DemoCreditScores)

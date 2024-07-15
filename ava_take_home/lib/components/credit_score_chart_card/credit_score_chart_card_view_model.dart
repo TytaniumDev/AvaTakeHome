@@ -11,7 +11,7 @@ class CreditScoreChartCardViewModel extends _$CreditScoreChartCardViewModel {
     final creditScores = ref.watch(creditScoresForLastTwelveMonthsProvider);
 
     return CreditScoreChartCardViewData(
-      scorePerMonthForLastTwelveMonths: creditScores.reversed
+      scorePerMonthForLastTwelveMonths: creditScores
           .map(
             (creditScore) => CreditScoreDataPoint(
               creditScore: creditScore.currentScore,

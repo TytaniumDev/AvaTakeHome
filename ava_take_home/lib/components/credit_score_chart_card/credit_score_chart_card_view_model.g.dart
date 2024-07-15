@@ -7,7 +7,7 @@ part of 'credit_score_chart_card_view_model.dart';
 // **************************************************************************
 
 String _$creditScoreChartCardViewModelHash() =>
-    r'4d71c7dc64906b5996606ebca2f6a491efa696ac';
+    r'8f2068e2a735f5cbb8a3400b2ced934806854fcb';
 
 /// See also [CreditScoreChartCardViewModel].
 @ProviderFor(CreditScoreChartCardViewModel)

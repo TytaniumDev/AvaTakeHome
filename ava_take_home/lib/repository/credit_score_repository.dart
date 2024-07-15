@@ -16,8 +16,7 @@ CreditScore currentCreditScoreModel(CurrentCreditScoreModelRef ref) {
 /// most recent first, oldest last.
 @riverpod
 List<CreditScore> creditScoreHistoryModel(CreditScoreHistoryModelRef ref) {
-  return ref.watch(demoCreditScoresProvider)
-    ..sort((a, b) => a.lastUpdatedDate.compareTo(b.lastUpdatedDate));
+  return ref.watch(demoCreditScoresProvider);
 }
 
 /// Provides the history of the credit scores over the last twelve months,
@@ -31,11 +30,9 @@ List<CreditScore> creditScoreHistoryModel(CreditScoreHistoryModelRef ref) {
 /// Or the UI could be more dynamic. Lots of options!
 @riverpod
 List<CreditScore> creditScoresForLastTwelveMonths(
-  CreditScoreHistoryModelRef ref,
+  CreditScoresForLastTwelveMonthsRef ref,
 ) {
-  return ref.watch(demoCreditScoresProvider)
-    ..sort((a, b) => a.lastUpdatedDate.compareTo(b.lastUpdatedDate))
-    ..take(12);
+  return ref.watch(demoCreditScoresProvider)..take(12);
 }
 
 @riverpod
@@ -53,13 +50,14 @@ class DemoCreditScores extends _$DemoCreditScores {
   demoData([CreditScore? firstItem]) {
     return [
       if (firstItem != null) firstItem,
-      CreditScore(
-        currentScore: 720,
-        lastUpdatedDate: DateTime.now().subtract(const Duration(days: 1)),
-        nextUpdateDate: DateTime.now().add(const Duration(days: 2)),
-        latestChange: 2,
-        creditProvider: CreditProvider.experian,
-      ),
+      if (firstItem == null)
+        CreditScore(
+          currentScore: 724,
+          lastUpdatedDate: DateTime.now().subtract(const Duration(days: 1)),
+          nextUpdateDate: DateTime.now().add(const Duration(days: 2)),
+          latestChange: 2,
+          creditProvider: CreditProvider.experian,
+        ),
       CreditScore(
         currentScore: 700,
         lastUpdatedDate: DateTime.now().subtract(const Duration(days: 100)),
@@ -153,7 +151,7 @@ class DemoCreditScores extends _$DemoCreditScores {
       currentScore: nextScore,
       latestChange: creditScoreChange,
       lastUpdatedDate:
-          lastCreditScore.lastUpdatedDate.subtract(daysSinceUpdate),
+          DateTime.now().subtract(daysSinceUpdate),
       nextUpdateDate: lastCreditScore.nextUpdateDate.add(daysSinceUpdate),
     );
   }

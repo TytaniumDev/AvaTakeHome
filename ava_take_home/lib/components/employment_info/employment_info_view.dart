@@ -35,74 +35,77 @@ class _EmploymentInfoViewState extends State<EmploymentInfoView> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // The padding between the header and form contents are contained
-        // in the _Header widget to provide for a better looking animation.
-        _Header(inEditMode: _inEditMode),
-        Expanded(
-          child: _EmploymentInfoForm(
-            formKey: _formKey,
-            inEditMode: _inEditMode,
-            onFormChanged: (isValid) {
-              setState(() {
-                // Refresh the widget tree to trigger the "Continue" button's
-                // onPressed to be re-evaluated.
-              });
-            },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: [
+          // The padding between the header and form contents are contained
+          // in the _Header widget to provide for a better looking animation.
+          _Header(inEditMode: _inEditMode),
+          Expanded(
+            child: _EmploymentInfoForm(
+              formKey: _formKey,
+              inEditMode: _inEditMode,
+              onFormChanged: (isValid) {
+                setState(() {
+                  // Refresh the widget tree to trigger the "Continue" button's
+                  // onPressed to be re-evaluated.
+                });
+              },
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 12.0, bottom: 12),
-          child: Column(
-            children: [
-              _EditModeAnimatedSwitcher(
-                viewModeChild: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: OutlinedButton(
-                    onPressed: () {
-                      setState(() {
-                        _inEditMode = !_inEditMode;
-                      });
-                    },
-                    child: const Text('Edit'),
-                  ),
-                ),
-                editModeChild: const SizedBox(
-                  height: 0,
-                  width: double.infinity,
-                ),
-                inEditMode: _inEditMode,
-              ),
-              _EditModeAnimatedSwitcher(
-                viewModeChild: Column(
-                  children: [
-                    ElevatedButton(
+          Padding(
+            padding: const EdgeInsets.only(top: 12.0, bottom: 12),
+            child: Column(
+              children: [
+                _EditModeAnimatedSwitcher(
+                  viewModeChild: Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: OutlinedButton(
                       onPressed: () {
-                        context.pop(HomePage.route);
-                        showFeedbackSheet(context);
+                        setState(() {
+                          _inEditMode = !_inEditMode;
+                        });
                       },
-                      child: const Text('Confirm'),
+                      child: const Text('Edit'),
                     ),
-                  ],
+                  ),
+                  editModeChild: const SizedBox(
+                    height: 0,
+                    width: double.infinity,
+                  ),
+                  inEditMode: _inEditMode,
                 ),
-                editModeChild: ElevatedButton(
-                  onPressed: _formKey.currentState == null ||
-                          _formKey.currentState!.validate()
-                      ? () {
-                          setState(() {
-                            _inEditMode = !_inEditMode;
-                          });
-                        }
-                      : null,
-                  child: const Text('Continue'),
+                _EditModeAnimatedSwitcher(
+                  viewModeChild: Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          context.pop(HomePage.route);
+                          showFeedbackSheet(context);
+                        },
+                        child: const Text('Confirm'),
+                      ),
+                    ],
+                  ),
+                  editModeChild: ElevatedButton(
+                    onPressed: _formKey.currentState == null ||
+                            _formKey.currentState!.validate()
+                        ? () {
+                            setState(() {
+                              _inEditMode = !_inEditMode;
+                            });
+                          }
+                        : null,
+                    child: const Text('Continue'),
+                  ),
+                  inEditMode: _inEditMode,
                 ),
-                inEditMode: _inEditMode,
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

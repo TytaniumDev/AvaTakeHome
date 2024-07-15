@@ -1,4 +1,5 @@
 import 'package:ava_take_home/components/credit_score_header/credit_score_header_view_model.dart';
+import 'package:ava_take_home/components/credit_score_snippet/credit_score_snippet_view.dart';
 import 'package:ava_take_home/model/credit_score.dart';
 import 'package:ava_take_home/model/credit_score_rating.dart';
 import 'package:ava_take_home/ui/animation.dart';
@@ -26,106 +27,23 @@ class CreditScoreHeaderViewData {
   });
 }
 
-class CreditScoreHeaderView extends ConsumerWidget {
+class CreditScoreHeaderView extends StatelessWidget {
   const CreditScoreHeaderView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final viewData = ref.watch(creditScoreHeaderViewModelProvider);
-
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: homePageCardBoxDecoration(borderRadius: 20),
-      child: IntrinsicHeight(
+      child: const IntrinsicHeight(
         child: Row(
           children: [
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        children: [
-                          const Text(
-                            'Credit Score',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          _ScoreChangeChip(
-                            scoreChange: viewData.creditScoreChange,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 2),
-                      AnimatedText(
-                        'Updated ${Jiffy.parseFromDateTime(viewData.updatedDate).fromNow()}',
-                        style: const TextStyle(
-                          //TODO get color from theme
-                          color: AppColors.textLight,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      AnimatedText(
-                        'Next ${Jiffy.parseFromDateTime(viewData.nextUpdateDate).format(pattern: 'MMM do')}',
-                        style: const TextStyle(
-                          //TODO get color from theme
-                          color: AppColors.textLight,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                  AnimatedText(
-                    viewData.creditProvider.toDisplayString(),
-                    style: const TextStyle(
-                      color: AppColors.lightPurple,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.12,
-                    ),
-                  ),
-                ],
-              ),
+              child: CreditScoreSnippetView(),
             ),
-            const SizedBox(width: 8),
-            const _CreditScoreCircle(),
+            SizedBox(width: 8),
+            _CreditScoreCircle(),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ScoreChangeChip extends StatelessWidget {
-  final int scoreChange;
-
-  const _ScoreChangeChip({required this.scoreChange});
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: animationDuration,
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-      decoration: ShapeDecoration(
-        color: scoreChange >= 0 ? AppColors.avaSecondary : AppColors.badRed,
-        shape: const StadiumBorder(),
-      ),
-      child: AnimatedText(
-        '${scoreChange >= 0 ? '+' : '-'}${scoreChange}pts',
-        style: const TextStyle(
-          // TODO: Get color from theme
-          color: Colors.white,
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -288,15 +206,3 @@ extension on CreditScoreRating {
   }
 }
 
-extension on CreditProvider {
-  String toDisplayString() {
-    switch (this) {
-      case CreditProvider.equifax:
-        return 'Equifax';
-      case CreditProvider.transunion:
-        return 'Transunion';
-      case CreditProvider.experian:
-        return 'Experian';
-    }
-  }
-}

@@ -43,7 +43,35 @@ final creditScoreHistoryModelProvider =
 );
 
 typedef CreditScoreHistoryModelRef = AutoDisposeProviderRef<List<CreditScore>>;
-String _$demoCreditScoresHash() => r'59bed64731a378883e5743b93817ca40aec452ae';
+String _$creditScoresForLastTwelveMonthsHash() =>
+    r'84beeedde81adaa829fdc26a7ca040825b30c0f0';
+
+/// Provides the history of the credit scores over the last twelve months,
+/// one per month, with the latest scores first.
+///
+/// This is 100% a shortcut for the demo, the real app wouldn't behave like
+/// this. There would need to be another backend endpoint to retrieve this data,
+/// or some advanced filtering client side if we do pull the full credit score
+/// history.
+///
+/// Or the UI could be more dynamic. Lots of options!
+///
+/// Copied from [creditScoresForLastTwelveMonths].
+@ProviderFor(creditScoresForLastTwelveMonths)
+final creditScoresForLastTwelveMonthsProvider =
+    AutoDisposeProvider<List<CreditScore>>.internal(
+  creditScoresForLastTwelveMonths,
+  name: r'creditScoresForLastTwelveMonthsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$creditScoresForLastTwelveMonthsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef CreditScoresForLastTwelveMonthsRef
+    = AutoDisposeProviderRef<List<CreditScore>>;
+String _$demoCreditScoresHash() => r'2f919053152b359009e021c33affcdf57d2ec06b';
 
 /// See also [DemoCreditScores].
 @ProviderFor(DemoCreditScores)

@@ -9,6 +9,9 @@ A new Flutter project.
 
 ### Home page
 * The progress ring in the header seems to be at a mystery value. It should be further along the track if it is showing the progress towards maximum credit score (850), and further back if it is showing the progress within the "Good" score bucket (661-780). I'm assuming it's meant to show progress towards maximum credit score, and went with that implementation instead.
+* The total balance and total limit don't match with the actual open credit card accounts. I've added a "Capital One" card to the open credit card accounts to make the numbers work.
+* The utilization percentages in the open credit card accounts section are all wrong. They show 21% in Figma, but they should be 23% (rounded down).
+* The total balance card circle's starting point isn't at the top center? It's offset a bit, but I'm going to assume that's intentional and match it. 
 
 ### Employment information page
  * Sept isn't a valid ICU time format (https://unicode-org.github.io/icu/userguide/format_parse/datetime/). I used MMM as it's as close as possible, giving "Sep" instead of "Sept" from the Figma spec. 
@@ -17,3 +20,4 @@ A new Flutter project.
 ## Things I would change
 * Localization/Internationlization. Strings would need to go through the intl package.
 * Proper Repository architecture that can use a shared interface but have different implementations (local storage, REST API, etc). I didn't have enough time to fully figure out how to do this as I haven't used Riverpod before, but I assume there's a way.
+* The last bit of polish on the animations. The text animations jump in location when the length of the text changes. I'd need to do some restructuring to fix this, but just don't have time.

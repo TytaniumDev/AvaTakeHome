@@ -1,5 +1,5 @@
-import 'package:ava_take_home/common/text_validators.dart';
-import 'package:ava_take_home/theme.dart';
+import 'package:ava_take_home/ui/text_validation.dart';
+import 'package:ava_take_home/ui/theme.dart';
 import 'package:flutter/material.dart';
 
 showFeedbackSheet(BuildContext context) {

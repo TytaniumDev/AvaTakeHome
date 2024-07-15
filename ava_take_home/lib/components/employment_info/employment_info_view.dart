@@ -1,9 +1,11 @@
-import 'package:ava_take_home/common/text_validators.dart';
+import 'package:ava_take_home/ui/adaptive.dart';
+import 'package:ava_take_home/ui/animation.dart';
+import 'package:ava_take_home/ui/text_validation.dart';
 import 'package:ava_take_home/components/employment_info/employment_info_view_model.dart';
 import 'package:ava_take_home/components/feedback_sheet/feedback_sheet_view.dart';
 import 'package:ava_take_home/model/employment_info.dart';
 import 'package:ava_take_home/routes/home_page.dart';
-import 'package:ava_take_home/theme.dart';
+import 'package:ava_take_home/ui/theme.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +20,6 @@ import 'package:jiffy/jiffy.dart';
 
 part 'employment_info_view.freezed.dart';
 
-const _switchModeAnimationDuration = Duration(milliseconds: 300);
 
 class EmploymentInfoView extends StatefulWidget {
   const EmploymentInfoView({super.key});
@@ -31,83 +32,77 @@ class _EmploymentInfoViewState extends State<EmploymentInfoView> {
   final _formKey = GlobalKey<FormState>();
 
   bool _inEditMode = false;
-  bool _inputsAreValid = true;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: 640,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            // The padding between the header and form contents are contained
-            // in the _Header widget to provide for a better looking animation.
-            _Header(inEditMode: _inEditMode),
-            Expanded(
-              child: _EmploymentInfoForm(
-                formKey: _formKey,
+    return Column(
+      children: [
+        // The padding between the header and form contents are contained
+        // in the _Header widget to provide for a better looking animation.
+        _Header(inEditMode: _inEditMode),
+        Expanded(
+          child: _EmploymentInfoForm(
+            formKey: _formKey,
+            inEditMode: _inEditMode,
+            onFormChanged: (isValid) {
+              setState(() {
+                // Refresh the widget tree to trigger the "Continue" button's
+                // onPressed to be re-evaluated.
+              });
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 12.0, bottom: 12),
+          child: Column(
+            children: [
+              _EditModeAnimatedSwitcher(
+                viewModeChild: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: OutlinedButton(
+                    onPressed: () {
+                      setState(() {
+                        _inEditMode = !_inEditMode;
+                      });
+                    },
+                    child: const Text('Edit'),
+                  ),
+                ),
+                editModeChild: const SizedBox(
+                  height: 0,
+                  width: double.infinity,
+                ),
                 inEditMode: _inEditMode,
-                onFormChanged: (isValid) {
-                  setState(() {
-                    _inputsAreValid = isValid;
-                  });
-                },
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 12.0, bottom: 12),
-              child: Column(
-                children: [
-                  _EditModeAnimatedSwitcher(
-                    viewModeChild: Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: OutlinedButton(
-                        onPressed: () {
+              _EditModeAnimatedSwitcher(
+                viewModeChild: Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        context.pop(HomePage.route);
+                        showFeedbackSheet(context);
+                      },
+                      child: const Text('Confirm'),
+                    ),
+                  ],
+                ),
+                editModeChild: ElevatedButton(
+                  onPressed: _formKey.currentState == null ||
+                          _formKey.currentState!.validate()
+                      ? () {
                           setState(() {
                             _inEditMode = !_inEditMode;
                           });
-                        },
-                        child: const Text('Edit'),
-                      ),
-                    ),
-                    editModeChild: const SizedBox(
-                      height: 0,
-                      width: double.infinity,
-                    ),
-                    inEditMode: _inEditMode,
-                  ),
-                  _EditModeAnimatedSwitcher(
-                    viewModeChild: Column(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            context.pop(HomePage.route);
-                            showFeedbackSheet(context);
-                          },
-                          child: const Text('Confirm'),
-                        ),
-                      ],
-                    ),
-                    editModeChild: ElevatedButton(
-                      onPressed: _formKey.currentState == null ||
-                              _formKey.currentState!.validate()
-                          ? () {
-                              setState(() {
-                                _inEditMode = !_inEditMode;
-                              });
-                            }
-                          : null,
-                      child: const Text('Continue'),
-                    ),
-                    inEditMode: _inEditMode,
-                  ),
-                ],
+                        }
+                      : null,
+                  child: const Text('Continue'),
+                ),
+                inEditMode: _inEditMode,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -493,7 +488,6 @@ class _ScrollingForm extends StatefulWidget {
   final Function(bool isValid) onFormChanged;
 
   const _ScrollingForm({
-    super.key,
     required this.formKey,
     required this.formWidgets,
     required this.onFormChanged,
@@ -531,7 +525,7 @@ class _ScrollingFormState extends State<_ScrollingForm> {
           child: AlignedGridView.extent(
             padding: const EdgeInsets.only(top: 28, bottom: 4),
             controller: scrollController,
-            maxCrossAxisExtent: 400,
+            maxCrossAxisExtent: gridMaxCrossAxisExtent,
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
             itemCount: widget.formWidgets.length,
@@ -636,7 +630,7 @@ class _EditModeAnimatedSwitcher extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
       alignment: AlignmentDirectional.topStart,
-      duration: _switchModeAnimationDuration,
+      duration: animationDuration,
       firstCurve: Curves.easeOut,
       secondCurve: Curves.easeIn,
       sizeCurve: Curves.linear,

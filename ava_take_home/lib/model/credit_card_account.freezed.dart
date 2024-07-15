@@ -22,7 +22,6 @@ mixin _$CreditCardAccount {
   /// the currency this is in with the server and add another field for it.
   int get balance => throw _privateConstructorUsedError;
   int get limit => throw _privateConstructorUsedError;
-  double get utilization => throw _privateConstructorUsedError;
   DateTime get reportedOnDate => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -36,12 +35,7 @@ abstract class $CreditCardAccountCopyWith<$Res> {
           CreditCardAccount value, $Res Function(CreditCardAccount) then) =
       _$CreditCardAccountCopyWithImpl<$Res, CreditCardAccount>;
   @useResult
-  $Res call(
-      {String name,
-      int balance,
-      int limit,
-      double utilization,
-      DateTime reportedOnDate});
+  $Res call({String name, int balance, int limit, DateTime reportedOnDate});
 }
 
 /// @nodoc
@@ -60,7 +54,6 @@ class _$CreditCardAccountCopyWithImpl<$Res, $Val extends CreditCardAccount>
     Object? name = null,
     Object? balance = null,
     Object? limit = null,
-    Object? utilization = null,
     Object? reportedOnDate = null,
   }) {
     return _then(_value.copyWith(
@@ -76,10 +69,6 @@ class _$CreditCardAccountCopyWithImpl<$Res, $Val extends CreditCardAccount>
           ? _value.limit
           : limit // ignore: cast_nullable_to_non_nullable
               as int,
-      utilization: null == utilization
-          ? _value.utilization
-          : utilization // ignore: cast_nullable_to_non_nullable
-              as double,
       reportedOnDate: null == reportedOnDate
           ? _value.reportedOnDate
           : reportedOnDate // ignore: cast_nullable_to_non_nullable
@@ -96,12 +85,7 @@ abstract class _$$CreditCardAccountImplCopyWith<$Res>
       __$$CreditCardAccountImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String name,
-      int balance,
-      int limit,
-      double utilization,
-      DateTime reportedOnDate});
+  $Res call({String name, int balance, int limit, DateTime reportedOnDate});
 }
 
 /// @nodoc
@@ -118,7 +102,6 @@ class __$$CreditCardAccountImplCopyWithImpl<$Res>
     Object? name = null,
     Object? balance = null,
     Object? limit = null,
-    Object? utilization = null,
     Object? reportedOnDate = null,
   }) {
     return _then(_$CreditCardAccountImpl(
@@ -134,10 +117,6 @@ class __$$CreditCardAccountImplCopyWithImpl<$Res>
           ? _value.limit
           : limit // ignore: cast_nullable_to_non_nullable
               as int,
-      utilization: null == utilization
-          ? _value.utilization
-          : utilization // ignore: cast_nullable_to_non_nullable
-              as double,
       reportedOnDate: null == reportedOnDate
           ? _value.reportedOnDate
           : reportedOnDate // ignore: cast_nullable_to_non_nullable
@@ -153,7 +132,6 @@ class _$CreditCardAccountImpl implements _CreditCardAccount {
       {required this.name,
       required this.balance,
       required this.limit,
-      required this.utilization,
       required this.reportedOnDate});
 
   @override
@@ -166,13 +144,11 @@ class _$CreditCardAccountImpl implements _CreditCardAccount {
   @override
   final int limit;
   @override
-  final double utilization;
-  @override
   final DateTime reportedOnDate;
 
   @override
   String toString() {
-    return 'CreditCardAccount(name: $name, balance: $balance, limit: $limit, utilization: $utilization, reportedOnDate: $reportedOnDate)';
+    return 'CreditCardAccount(name: $name, balance: $balance, limit: $limit, reportedOnDate: $reportedOnDate)';
   }
 
   @override
@@ -183,15 +159,13 @@ class _$CreditCardAccountImpl implements _CreditCardAccount {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.balance, balance) || other.balance == balance) &&
             (identical(other.limit, limit) || other.limit == limit) &&
-            (identical(other.utilization, utilization) ||
-                other.utilization == utilization) &&
             (identical(other.reportedOnDate, reportedOnDate) ||
                 other.reportedOnDate == reportedOnDate));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, name, balance, limit, utilization, reportedOnDate);
+  int get hashCode =>
+      Object.hash(runtimeType, name, balance, limit, reportedOnDate);
 
   @JsonKey(ignore: true)
   @override
@@ -206,7 +180,6 @@ abstract class _CreditCardAccount implements CreditCardAccount {
       {required final String name,
       required final int balance,
       required final int limit,
-      required final double utilization,
       required final DateTime reportedOnDate}) = _$CreditCardAccountImpl;
 
   @override
@@ -218,8 +191,6 @@ abstract class _CreditCardAccount implements CreditCardAccount {
   int get balance;
   @override
   int get limit;
-  @override
-  double get utilization;
   @override
   DateTime get reportedOnDate;
   @override

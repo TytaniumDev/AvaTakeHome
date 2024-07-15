@@ -25,7 +25,7 @@ final creditCardAccountRepositoryProvider = AutoDisposeNotifierProvider<
 typedef _$CreditCardAccountRepository
     = AutoDisposeNotifier<List<CreditCardAccount>>;
 String _$demoCreditCardAccountsHash() =>
-    r'f56223434fc588af44ed3dd5e40b7b212d8a3310';
+    r'94e735172ec431de09b62b58764b353823a8c92b';
 
 /// See also [DemoCreditCardAccounts].
 @ProviderFor(DemoCreditCardAccounts)

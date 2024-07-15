@@ -1,7 +1,8 @@
 import 'package:ava_take_home/components/credit_score_header/credit_score_header_view_model.dart';
 import 'package:ava_take_home/model/credit_score.dart';
 import 'package:ava_take_home/model/credit_score_rating.dart';
-import 'package:ava_take_home/theme.dart';
+import 'package:ava_take_home/ui/animation.dart';
+import 'package:ava_take_home/ui/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jiffy/jiffy.dart';
@@ -63,7 +64,7 @@ class CreditScoreHeaderView extends ConsumerWidget {
                         ],
                       ),
                       const SizedBox(height: 2),
-                      Text(
+                      AnimatedText(
                         'Updated ${Jiffy.parseFromDateTime(viewData.updatedDate).fromNow()}',
                         style: const TextStyle(
                           //TODO get color from theme
@@ -72,7 +73,7 @@ class CreditScoreHeaderView extends ConsumerWidget {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      Text(
+                      AnimatedText(
                         'Next ${Jiffy.parseFromDateTime(viewData.nextUpdateDate).format(pattern: 'MMM do')}',
                         style: const TextStyle(
                           //TODO get color from theme
@@ -83,7 +84,7 @@ class CreditScoreHeaderView extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  Text(
+                  AnimatedText(
                     viewData.creditProvider.toDisplayString(),
                     style: const TextStyle(
                       color: AppColors.lightPurple,
@@ -107,17 +108,18 @@ class CreditScoreHeaderView extends ConsumerWidget {
 class _ScoreChangeChip extends StatelessWidget {
   final int scoreChange;
 
-  const _ScoreChangeChip({super.key, required this.scoreChange});
+  const _ScoreChangeChip({required this.scoreChange});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: animationDuration,
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
       decoration: ShapeDecoration(
         color: scoreChange >= 0 ? AppColors.avaSecondary : AppColors.badRed,
         shape: const StadiumBorder(),
       ),
-      child: Text(
+      child: AnimatedText(
         '${scoreChange >= 0 ? '+' : '-'}${scoreChange}pts',
         style: const TextStyle(
           // TODO: Get color from theme
@@ -131,16 +133,13 @@ class _ScoreChangeChip extends StatelessWidget {
 }
 
 class _CreditScoreCircle extends ConsumerStatefulWidget {
-  const _CreditScoreCircle({super.key});
+  const _CreditScoreCircle();
 
   @override
   ConsumerState<_CreditScoreCircle> createState() => _CreditScoreCircleState();
 }
 
 class _CreditScoreCircleState extends ConsumerState<_CreditScoreCircle> {
-  static const Duration animationDuration = Duration(milliseconds: 500);
-  static const Curve animationCurve = Curves.easeInOutQuart;
-
   int? previousCreditScore;
   late int currentCreditScore;
 
@@ -191,7 +190,7 @@ class _CreditScoreCircleState extends ConsumerState<_CreditScoreCircle> {
                 ),
                 duration: animationDuration,
                 curve: animationCurve,
-                builder: (context, value, _) {
+                builder: (context, value, child) {
                   return CircularProgressIndicator(
                     key: const ValueKey('CreditScoreCircle'),
                     value: value,
@@ -208,7 +207,7 @@ class _CreditScoreCircleState extends ConsumerState<_CreditScoreCircle> {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              AnimatedText(
                 '$currentCreditScore',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
@@ -218,7 +217,7 @@ class _CreditScoreCircleState extends ConsumerState<_CreditScoreCircle> {
                   height: 1,
                 ),
               ),
-              Text(
+              AnimatedText(
                 creditScoreRating.toDisplayString(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
@@ -255,6 +254,36 @@ extension on CreditScoreRating {
         return 'Fair';
       case CreditScoreRating.poor:
         return 'Poor';
+    }
+  }
+
+  Color toActiveColor() {
+    switch (this) {
+      case CreditScoreRating.excellent:
+        return AppColors.avaSecondary;
+      case CreditScoreRating.veryGood:
+        return AppColors.avaSecondary;
+      case CreditScoreRating.good:
+        return AppColors.avaSecondary;
+      case CreditScoreRating.fair:
+        return AppColors.okayOrange;
+      case CreditScoreRating.poor:
+        return AppColors.badRed;
+    }
+  }
+
+  Color toInactiveColor() {
+    switch (this) {
+      case CreditScoreRating.excellent:
+        return AppColors.avaSecondaryLight;
+      case CreditScoreRating.veryGood:
+        return AppColors.avaSecondaryLight;
+      case CreditScoreRating.good:
+        return AppColors.avaSecondaryLight;
+      case CreditScoreRating.fair:
+        return AppColors.okayOrangeLight;
+      case CreditScoreRating.poor:
+        return AppColors.badRedLight;
     }
   }
 }

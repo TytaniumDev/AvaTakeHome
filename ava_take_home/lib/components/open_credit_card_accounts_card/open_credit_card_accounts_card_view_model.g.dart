@@ -7,7 +7,7 @@ part of 'open_credit_card_accounts_card_view_model.dart';
 // **************************************************************************
 
 String _$openCreditCardAccountsCardViewModelHash() =>
-    r'14cedc6533acf2f9636e626f645b48e0d94ab49a';
+    r'01ec6a807791aa9c103231eff1956a0ac5b493e2';
 
 /// See also [OpenCreditCardAccountsCardViewModel].
 @ProviderFor(OpenCreditCardAccountsCardViewModel)

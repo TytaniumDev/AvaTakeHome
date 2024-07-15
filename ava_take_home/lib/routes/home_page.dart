@@ -1,9 +1,12 @@
+import 'package:ava_take_home/ui/adaptive.dart';
+import 'package:ava_take_home/components/ava_account_detail_card/ava_account_detail_card_view.dart';
 import 'package:ava_take_home/components/credit_factors/credit_factors_view.dart';
+import 'package:ava_take_home/components/credit_score_chart_card/credit_score_chart_card_view.dart';
 import 'package:ava_take_home/components/credit_score_header/credit_score_header_view.dart';
-import 'package:ava_take_home/components/feedback_sheet/feedback_sheet_view.dart';
 import 'package:ava_take_home/components/open_credit_card_accounts_card/open_credit_card_accounts_card_view.dart';
+import 'package:ava_take_home/components/total_balance_card/total_balance_card_view.dart';
 import 'package:ava_take_home/routes/settings.dart';
-import 'package:ava_take_home/theme.dart';
+import 'package:ava_take_home/ui/theme.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -46,7 +49,9 @@ class HomePage extends StatelessWidget {
               child: CreditScoreHeaderView(),
             ),
             Expanded(
-              child: _HomePageList(),
+              child: ResponsiveContainer(
+                child: _HomePageList(),
+              ),
             ),
           ],
         ),
@@ -56,7 +61,7 @@ class HomePage extends StatelessWidget {
 }
 
 class _HomePageList extends StatefulWidget {
-  const _HomePageList({super.key});
+  const _HomePageList();
 
   @override
   State<_HomePageList> createState() => __HomePageListState();
@@ -80,74 +85,35 @@ class __HomePageListState extends State<_HomePageList> {
   @override
   Widget build(BuildContext context) {
     final listItems = [
-      Column(
-        children: [
-          const Text(
-            'Chart',
-            style: TextStyle(
-              color: AppColors.textPrimaryDark,
-              fontSize: 22,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          Container(
-            width: 343,
-            height: 261,
-            decoration: homePageCardBoxDecoration(),
-          ),
-        ],
+      const _HomeListItem(
+        title: 'Chart',
+        child: CreditScoreChartCardView(),
       ),
-      const Column(
-        children: [
-          Text(
-            'Credit factors',
-            style: TextStyle(
-              color: AppColors.textPrimaryDark,
-              fontSize: 22,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          CreditFactorsView(),
-        ],
+      const _HomeListItem(
+        title: 'Credit factors',
+        childPadding: EdgeInsets.zero,
+        child: CreditFactorsView(),
       ),
-      const Column(
-        children: [
-          Text(
-            'Account details',
-            style: TextStyle(
-              color: AppColors.textPrimaryDark,
-              fontSize: 22,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          
-        ],
-      ),
-      const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+      const _HomeListItem(
+        title: 'Account details',
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Open credit card accounts',
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                color: AppColors.textPrimaryDark,
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            SizedBox(height: 20),
-            OpenCreditCardAccountsCardView(),
+            AvaAccountDetailCardView(),
+            SizedBox(height: 34),
+            TotalBalanceCardView(),
           ],
         ),
+      ),
+      const _HomeListItem(
+        title: 'Open credit card accounts',
+        child: OpenCreditCardAccountsCardView(),
       ),
     ];
 
     return FadingEdgeScrollView.fromScrollView(
       child: MasonryGridView.extent(
         controller: scrollController,
-        maxCrossAxisExtent: 640,
+        maxCrossAxisExtent: gridMaxCrossAxisExtent,
         padding: const EdgeInsets.only(top: 32, bottom: 16),
         itemCount: listItems.length,
         itemBuilder: (context, index) {
@@ -158,10 +124,47 @@ class __HomePageListState extends State<_HomePageList> {
   }
 }
 
+class _HomeListItem extends StatelessWidget {
+  final String title;
+  final EdgeInsetsGeometry childPadding;
+  final Widget child;
+
+  const _HomeListItem({
+    required this.title,
+    this.childPadding = const EdgeInsets.only(left: 16, right: 16, top: 12),
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          child: Text(
+            title,
+            textAlign: TextAlign.start,
+            style: const TextStyle(
+              color: AppColors.textPrimaryDark,
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        Padding(
+          padding: childPadding,
+          child: child,
+        ),
+      ],
+    );
+  }
+}
+
 class _HeaderChin extends StatelessWidget {
   final Widget child;
 
-  const _HeaderChin({super.key, required this.child});
+  const _HeaderChin({required this.child});
 
   @override
   Widget build(BuildContext context) {

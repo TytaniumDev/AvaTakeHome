@@ -6,7 +6,7 @@ BoxDecoration homePageCardBoxDecoration({double borderRadius = 24}) {
     border: Border.all(color: AppColors.borderColor),
     color: AppColors.backgroundWhite,
   );
-} 
+}
 
 final avaTheme = ThemeData(
   colorScheme: ColorScheme.fromSeed(seedColor: AppColors.avaPrimary),
@@ -108,7 +108,6 @@ abstract class AppColors {
   static const Color okayOrangeLight = Color(0xffFFD8B9);
   static const Color badRed = Color(0xffdd1338);
   static const Color badRedLight = Color(0xffF5B8C3);
-
 
   // Text colors:
   static const Color textGreen = Color(0xff003928);

@@ -1,5 +1,7 @@
 import 'package:ava_take_home/components/open_credit_card_accounts_card/open_credit_card_accounts_card_view_model.dart';
-import 'package:ava_take_home/theme.dart';
+import 'package:ava_take_home/ui/animation.dart';
+import 'package:ava_take_home/ui/theme.dart';
+import 'package:ava_take_home/ui/utilization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -56,7 +58,7 @@ class OpenCreditCardAccountsCardView extends ConsumerWidget {
 class _AccountDetail extends StatelessWidget {
   final OpenCreditCardAccountViewData viewData;
 
-  const _AccountDetail({super.key, required this.viewData});
+  const _AccountDetail({required this.viewData});
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +69,7 @@ class _AccountDetail extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(
+            AnimatedText(
               viewData.name,
               style: const TextStyle(
                 fontSize: 16,
@@ -75,7 +77,7 @@ class _AccountDetail extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            Text(
+            AnimatedText(
               '${viewData.utilization}%',
               textAlign: TextAlign.right,
               style: const TextStyle(
@@ -89,21 +91,12 @@ class _AccountDetail extends StatelessWidget {
         // TODO Animate this
         Padding(
           padding: const EdgeInsetsDirectional.only(end: 16),
-          child: LinearProgressIndicator(
-            value: viewData.utilization / 100,
-            backgroundColor: AppColors.borderColor,
-            color:
-                Utilization.fromPercentInt(viewData.utilization).displayColor,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(999 /* This is what's in the Figma spec */),
-            ),
-            minHeight: 8,
-          ),
+          child: _UtilizationAmountBar(utilization: viewData.utilization),
         ),
         const SizedBox(height: 12),
         Row(
           children: [
-            Text(
+            AnimatedText(
               currencyFormat.format(viewData.balance),
               style: const TextStyle(
                 fontSize: 14,
@@ -111,7 +104,7 @@ class _AccountDetail extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            Text(
+            AnimatedText(
               currencyFormat.format(viewData.limit),
               style: const TextStyle(
                 fontSize: 14,
@@ -121,7 +114,7 @@ class _AccountDetail extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-        Text(
+        AnimatedText(
           'Reported on ${DateFormat.yMMMMd().format(viewData.reportedOnDate)}',
           textAlign: TextAlign.start,
           style: const TextStyle(
@@ -136,50 +129,85 @@ class _AccountDetail extends StatelessWidget {
   }
 }
 
-//TODO Move this somewhere shared
-enum Utilization {
-  low(
-    displayColor: AppColors.avaSecondary,
-    inactiveColor: AppColors.avaSecondaryLight,
-  ),
-  medium(
-    displayColor: AppColors.okayOrange,
-    inactiveColor: AppColors.okayOrangeLight,
-  ),
-  high(
-    displayColor: AppColors.badRed,
-    inactiveColor: AppColors.badRedLight,
-  );
+class _UtilizationAmountBar extends StatefulWidget {
+  final int utilization;
 
-  final Color displayColor;
-  final Color inactiveColor;
+  const _UtilizationAmountBar({
+    super.key,
+    required this.utilization,
+  });
 
-  const Utilization({required this.displayColor, required this.inactiveColor});
+  @override
+  State<_UtilizationAmountBar> createState() => _UtilizationAmountBarState();
+}
 
-  String get displayName {
-    switch (this) {
-      case low:
-        return 'Excellent';
-      case medium:
-        return 'Fair';
-      case high:
-        return 'Poor';
+class _UtilizationAmountBarState extends State<_UtilizationAmountBar>
+    with TickerProviderStateMixin {
+  late final AnimationController controller =
+      AnimationController(vsync: this, duration: animationDuration);
+
+  late Animation linearProgressAnimation =
+      AlwaysStoppedAnimation(progressValueFromUtilization(widget.utilization));
+  late Animation colorAnimation =
+      AlwaysStoppedAnimation(barColorFromUtilization(widget.utilization));
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant _UtilizationAmountBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget != widget) {
+      final oldColor = barColorFromUtilization(oldWidget.utilization);
+      final newColor = barColorFromUtilization(widget.utilization);
+
+      colorAnimation = ColorTween(begin: oldColor, end: newColor).animate(
+        CurvedAnimation(parent: controller, curve: animationCurve),
+      );
+
+      final oldProgress = progressValueFromUtilization(oldWidget.utilization);
+      final newProgress = progressValueFromUtilization(widget.utilization);
+
+      linearProgressAnimation =
+          Tween<double>(begin: oldProgress, end: newProgress).animate(
+        CurvedAnimation(
+          parent: controller,
+          curve: animationCurve,
+        ),
+      );
+
+      controller.forward(from: 0);
     }
   }
 
-  static Utilization fromPercentDouble(double utilizationPercentage) {
-    return fromPercentInt((utilizationPercentage * 100).toInt());
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(999 /* This is what's in the Figma spec */),
+      ),
+      child: AnimatedBuilder(
+        animation: controller,
+        builder: (BuildContext context, Widget? child) {
+          return LinearProgressIndicator(
+            value: linearProgressAnimation.value,
+            backgroundColor: AppColors.borderColor,
+            color: colorAnimation.value,
+            minHeight: 8,
+          );
+        },
+      ),
+    );
   }
 
-  static Utilization fromPercentInt(int utilizationPercentage) {
-    switch (utilizationPercentage) {
-      case >= 0 && <= 29:
-        return Utilization.low;
-      case >= 30 && <= 49:
-        return Utilization.medium;
-      case >= 50 && <= 75:
-      default:
-        return Utilization.high;
-    }
+  Color barColorFromUtilization(int utilization) {
+    return Utilization.fromPercentInt(widget.utilization).displayColor;
+  }
+
+  double progressValueFromUtilization(int utilization) {
+    return utilization / 100;
   }
 }

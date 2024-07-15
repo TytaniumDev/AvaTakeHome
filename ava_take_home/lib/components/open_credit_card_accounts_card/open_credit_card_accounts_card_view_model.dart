@@ -16,7 +16,7 @@ class OpenCreditCardAccountsCardViewModel
           name: account.name,
           balance: account.balance,
           limit: account.limit,
-          utilization: account.utilization.ceil(),
+          utilization: ((account.balance / account.limit) * 100).floor(),
           reportedOnDate: account.reportedOnDate,
         );
       }).toList(),

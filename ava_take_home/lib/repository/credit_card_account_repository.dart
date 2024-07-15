@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:ava_take_home/model/credit_card_account.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,28 +19,43 @@ class CreditCardAccountRepository extends _$CreditCardAccountRepository {
 class DemoCreditCardAccounts extends _$DemoCreditCardAccounts {
   @override
   List<CreditCardAccount> build() {
+    Timer.periodic(const Duration(seconds: 3), (timer) {
+      state = generateRandomBalances();
+    });
+
     return [
       CreditCardAccount(
         name: 'Syncb/Amazon',
         balance: 1500,
         limit: 6300,
-        utilization: 21,
         reportedOnDate: Jiffy.parse('2023-06-20').dateTime,
       ),
       CreditCardAccount(
         name: 'Syncb/Amazon',
         balance: 1500,
         limit: 6300,
-        utilization: 21,
         reportedOnDate: Jiffy.parse('2023-06-20').dateTime,
       ),
       CreditCardAccount(
         name: 'Syncb/Amazon',
         balance: 1500,
         limit: 6300,
-        utilization: 21,
         reportedOnDate: Jiffy.parse('2023-06-20').dateTime,
+      ),
+      CreditCardAccount(
+        name: 'Capital One',
+        balance: 3890,
+        limit: 182000,
+        reportedOnDate: Jiffy.parse('2023-09-12').dateTime,
       ),
     ];
+  }
+
+  List<CreditCardAccount> generateRandomBalances() {
+    return state.map((account) {
+      return account.copyWith(
+        balance: Random().nextInt(account.limit),
+      );
+    }).toList();
   }
 }

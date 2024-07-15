@@ -1,5 +1,5 @@
 import 'package:ava_take_home/components/credit_factors/credit_factors_view_model.dart';
-import 'package:ava_take_home/theme.dart';
+import 'package:ava_take_home/ui/theme.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -101,7 +101,6 @@ class _CreditFactorCard extends StatelessWidget {
   final ImpactLevel impact;
 
   const _CreditFactorCard({
-    super.key,
     required this.title,
     required this.info,
     required this.impact,

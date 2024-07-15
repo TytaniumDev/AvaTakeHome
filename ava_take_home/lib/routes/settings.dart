@@ -1,5 +1,6 @@
+import 'package:ava_take_home/ui/adaptive.dart';
 import 'package:ava_take_home/components/employment_info/employment_info_view.dart';
-import 'package:ava_take_home/theme.dart';
+import 'package:ava_take_home/ui/theme.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -14,7 +15,11 @@ class SettingsPage extends StatelessWidget {
         backgroundColor: AppColors.manilla,
         scrolledUnderElevation: 0,
       ),
-      body: const SafeArea(child: EmploymentInfoView()),
+      body: const SafeArea(
+        child: ResponsiveContainer(
+          child: EmploymentInfoView(),
+        ),
+      ),
       backgroundColor: AppColors.manilla,
     );
   }

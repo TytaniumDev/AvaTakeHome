@@ -43,10 +43,14 @@ class DemoCreditScores extends _$DemoCreditScores {
   CreditScore generateNextDemoScore(CreditScore lastCreditScore) {
     final creditScoreChange = Random().nextInt(50) - 25;
     final daysSinceUpdate = Duration(days: Random().nextInt(35));
+    int nextScore = lastCreditScore.currentScore + creditScoreChange;
+    if (nextScore < CreditScore.min) {
+      nextScore = CreditScore.max - creditScoreChange;
+    } else if (nextScore > CreditScore.max) {
+      nextScore = CreditScore.min + creditScoreChange;
+    }
     return lastCreditScore.copyWith(
-      currentScore: lastCreditScore.currentScore >= CreditScore.max
-          ? 300
-          : lastCreditScore.currentScore + creditScoreChange,
+      currentScore: nextScore,
       latestChange: creditScoreChange,
       lastUpdatedDate:
           lastCreditScore.lastUpdatedDate.subtract(daysSinceUpdate),

@@ -41,6 +41,7 @@ class OpenCreditCardAccountsCardView extends ConsumerWidget {
       padding: const EdgeInsets.all(20),
       child: ListView.separated(
         shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         separatorBuilder: (_, __) => const Padding(
           padding: EdgeInsets.only(top: 20, bottom: 12),
           child: Divider(),

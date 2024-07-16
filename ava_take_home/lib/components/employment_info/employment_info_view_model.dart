@@ -70,61 +70,67 @@ class EmploymentInfoViewModel extends _$EmploymentInfoViewModel {
 
   void updateEmploymentType(EmploymentType employmentType) {
     _repository.updateEmploymentInfo(
-      _latestEmploymentInfo.copyWith(employmentType: employmentType),
+      _latestEmploymentInfo =
+          _latestEmploymentInfo.copyWith(employmentType: employmentType),
     );
   }
 
   void updateEmployer(String employer) {
-    _repository.updateEmploymentInfo(
-      _latestEmploymentInfo.copyWith(employer: employer),
-    );
+    _latestEmploymentInfo = _latestEmploymentInfo.copyWith(employer: employer);
+    _repository.updateEmploymentInfo(_latestEmploymentInfo);
   }
 
   void updateJobTitle(String jobTitle) {
     _repository.updateEmploymentInfo(
-      _latestEmploymentInfo.copyWith(jobTitle: jobTitle),
+      _latestEmploymentInfo =
+          _latestEmploymentInfo.copyWith(jobTitle: jobTitle),
     );
   }
 
   void updateGrossAnnualIncome(int grossAnnualIncome) {
     _repository.updateEmploymentInfo(
-      _latestEmploymentInfo.copyWith(grossAnnualIncome: grossAnnualIncome),
+      _latestEmploymentInfo =
+          _latestEmploymentInfo.copyWith(grossAnnualIncome: grossAnnualIncome),
     );
   }
 
   void updatePayFrequency(PayFrequency payFrequency) {
     _repository.updateEmploymentInfo(
-      _latestEmploymentInfo.copyWith(payFrequency: payFrequency),
+      _latestEmploymentInfo =
+          _latestEmploymentInfo.copyWith(payFrequency: payFrequency),
     );
   }
 
   void updateNextPayday(DateTime nextPayday) {
     _repository.updateEmploymentInfo(
-      _latestEmploymentInfo.copyWith(nextPayday: nextPayday),
+      _latestEmploymentInfo =
+          _latestEmploymentInfo.copyWith(nextPayday: nextPayday),
     );
   }
 
   void updateIsPayDirectDeposit(bool isPayDirectDeposit) {
     _repository.updateEmploymentInfo(
-      _latestEmploymentInfo.copyWith(isPayDirectDeposit: isPayDirectDeposit),
+      _latestEmploymentInfo = _latestEmploymentInfo.copyWith(
+          isPayDirectDeposit: isPayDirectDeposit),
     );
   }
 
   void updateEmployerAddress(String employerAddress) {
     _repository.updateEmploymentInfo(
-      _latestEmploymentInfo.copyWith(employerAddress: employerAddress),
+      _latestEmploymentInfo =
+          _latestEmploymentInfo.copyWith(employerAddress: employerAddress),
     );
   }
 
   Future<void> updateTimeWithEmployerYears(int years) async {
     final currentYearsOfEmployment = await future;
     _repository.updateEmploymentInfo(
-      _latestEmploymentInfo.copyWith(
-        employerStartDate:
-            Jiffy.now()
+      _latestEmploymentInfo = _latestEmploymentInfo.copyWith(
+        employerStartDate: Jiffy.now()
             .subtract(
-                years: years,
-                months: currentYearsOfEmployment.timeWithEmployerMonths,)
+              years: years,
+              months: currentYearsOfEmployment.timeWithEmployerMonths,
+            )
             .dateTime,
       ),
     );
@@ -133,7 +139,7 @@ class EmploymentInfoViewModel extends _$EmploymentInfoViewModel {
   Future<void> updateTimeWithEmployerMonths(int months) async {
     final currentYearsOfEmployment = await future;
     _repository.updateEmploymentInfo(
-      _latestEmploymentInfo.copyWith(
+      _latestEmploymentInfo = _latestEmploymentInfo.copyWith(
         employerStartDate: Jiffy.now()
             .subtract(
               years: currentYearsOfEmployment.timeWithEmployerYears,

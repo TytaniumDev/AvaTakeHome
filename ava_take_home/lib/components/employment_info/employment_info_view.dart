@@ -20,7 +20,6 @@ import 'package:jiffy/jiffy.dart';
 
 part 'employment_info_view.freezed.dart';
 
-
 class EmploymentInfoView extends StatefulWidget {
   const EmploymentInfoView({super.key});
 
@@ -93,6 +92,7 @@ class _EmploymentInfoViewState extends State<EmploymentInfoView> {
                             _formKey.currentState!.validate()
                         ? () {
                             setState(() {
+                              _formKey.currentState?.save();
                               _inEditMode = !_inEditMode;
                             });
                           }
@@ -235,6 +235,12 @@ class _EmploymentInfoForm extends ConsumerWidget {
               autofillHints: const [AutofillHints.organizationName],
               textCapitalization: TextCapitalization.words,
               onFieldSubmitted: (text) => viewModel.updateEmployer(text),
+              onSaved: (text) {
+                print('onSaved employer, text is $text');
+                if (text != null) {
+                  viewModel.updateEmployer(text);
+                }
+              },
             ),
           ),
           _AnimatedInfoField(
@@ -247,6 +253,11 @@ class _EmploymentInfoForm extends ConsumerWidget {
               autofillHints: const [AutofillHints.jobTitle],
               textCapitalization: TextCapitalization.words,
               onFieldSubmitted: (text) => viewModel.updateJobTitle(text),
+              onSaved: (text) {
+                if (text != null) {
+                  viewModel.updateJobTitle(text);
+                }
+              },
             ),
           ),
           _AnimatedInfoField(
@@ -272,8 +283,15 @@ class _EmploymentInfoForm extends ConsumerWidget {
                 // Limit length to 18 to not go over the int limit.
                 LengthLimitingTextInputFormatter(18),
               ],
-              onFieldSubmitted: (text) =>
-                  viewModel.updateGrossAnnualIncome(int.parse(text)),
+              onFieldSubmitted: (text) => viewModel
+                  .updateGrossAnnualIncome(currencyFormat.parse(text).toInt()),
+              onSaved: (text) {
+                if (text != null) {
+                  viewModel.updateGrossAnnualIncome(
+                    currencyFormat.parse(text).toInt(),
+                  );
+                }
+              },
             ),
           ),
           _AnimatedInfoField(
@@ -310,6 +328,11 @@ class _EmploymentInfoForm extends ConsumerWidget {
                 textCapitalization: TextCapitalization.words,
                 onFieldSubmitted: (text) =>
                     viewModel.updateEmployerAddress(text),
+                onSaved: (text) {
+                  if (text != null) {
+                    viewModel.updateEmployerAddress(text);
+                  }
+                },
               ),
             ),
           ),

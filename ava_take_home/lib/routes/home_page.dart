@@ -114,6 +114,7 @@ class __HomePageListState extends State<_HomePageList> {
       child: MasonryGridView.extent(
         controller: scrollController,
         maxCrossAxisExtent: gridMaxCrossAxisExtent,
+        mainAxisSpacing: 24,
         padding: const EdgeInsets.only(top: 32, bottom: 16),
         itemCount: listItems.length,
         itemBuilder: (context, index) {

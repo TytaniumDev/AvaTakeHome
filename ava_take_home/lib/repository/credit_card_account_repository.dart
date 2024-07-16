@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:ava_take_home/demo_mode.dart';
 import 'package:ava_take_home/model/credit_card_account.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -17,11 +18,19 @@ class CreditCardAccountRepository extends _$CreditCardAccountRepository {
 
 @riverpod
 class DemoCreditCardAccounts extends _$DemoCreditCardAccounts {
+  Timer? _timer;
+
   @override
   List<CreditCardAccount> build() {
-    Timer.periodic(const Duration(seconds: 3), (timer) {
-      state = generateRandomBalances();
-    });
+    final demoModeEnabled = ref.watch(demoModeProvider);
+
+    if (demoModeEnabled) {
+      _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+        state = generateRandomBalances();
+      });
+    } else {
+      _timer?.cancel();
+    }
 
     return [
       CreditCardAccount(

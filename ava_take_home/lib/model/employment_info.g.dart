@@ -21,7 +21,8 @@ _$EmploymentInfoImpl _$$EmploymentInfoImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$EmploymentInfoImplToJson(
-        _$EmploymentInfoImpl instance) =>
+  _$EmploymentInfoImpl instance,
+) =>
     <String, dynamic>{
       'employmentType': _$EmploymentTypeEnumMap[instance.employmentType]!,
       'employer': instance.employer,

@@ -7,7 +7,7 @@ part of 'ava_account_detail_card_view_model.dart';
 // **************************************************************************
 
 String _$avaAccountDetailCardViewModelHash() =>
-    r'cf483808031cdb7b5206bafe9b40e147bfc4ad7f';
+    r'3cee8c76228aa4b36fa5ea18aac80f1460bc0c5b';
 
 /// See also [AvaAccountDetailCardViewModel].
 @ProviderFor(AvaAccountDetailCardViewModel)

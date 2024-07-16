@@ -53,7 +53,6 @@ class CreditScoreSnippetView extends ConsumerWidget {
             AnimatedText(
               'Updated ${Jiffy.parseFromDateTime(viewData.updatedDate).fromNow()}',
               style: const TextStyle(
-                //TODO get color from theme
                 color: AppColors.textLight,
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -62,7 +61,6 @@ class CreditScoreSnippetView extends ConsumerWidget {
             AnimatedText(
               'Next ${Jiffy.parseFromDateTime(viewData.nextUpdateDate).format(pattern: 'MMM do')}',
               style: const TextStyle(
-                //TODO get color from theme
                 color: AppColors.textLight,
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -101,7 +99,6 @@ class _ScoreChangeChip extends StatelessWidget {
       child: AnimatedText(
         '${scoreChange >= 0 ? '+' : '-'}${scoreChange}pts',
         style: const TextStyle(
-          // TODO: Get color from theme
           color: Colors.white,
           fontSize: 14,
           fontWeight: FontWeight.w600,

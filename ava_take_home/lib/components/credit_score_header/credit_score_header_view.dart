@@ -6,7 +6,6 @@ import 'package:ava_take_home/ui/animation.dart';
 import 'package:ava_take_home/ui/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jiffy/jiffy.dart';
 
 @immutable
 class CreditScoreHeaderViewData {
@@ -172,36 +171,6 @@ extension on CreditScoreRating {
         return 'Fair';
       case CreditScoreRating.poor:
         return 'Poor';
-    }
-  }
-
-  Color toActiveColor() {
-    switch (this) {
-      case CreditScoreRating.excellent:
-        return AppColors.avaSecondary;
-      case CreditScoreRating.veryGood:
-        return AppColors.avaSecondary;
-      case CreditScoreRating.good:
-        return AppColors.avaSecondary;
-      case CreditScoreRating.fair:
-        return AppColors.okayOrange;
-      case CreditScoreRating.poor:
-        return AppColors.badRed;
-    }
-  }
-
-  Color toInactiveColor() {
-    switch (this) {
-      case CreditScoreRating.excellent:
-        return AppColors.avaSecondaryLight;
-      case CreditScoreRating.veryGood:
-        return AppColors.avaSecondaryLight;
-      case CreditScoreRating.good:
-        return AppColors.avaSecondaryLight;
-      case CreditScoreRating.fair:
-        return AppColors.okayOrangeLight;
-      case CreditScoreRating.poor:
-        return AppColors.badRedLight;
     }
   }
 }

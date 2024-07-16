@@ -71,7 +71,7 @@ final creditScoresForLastTwelveMonthsProvider =
 
 typedef CreditScoresForLastTwelveMonthsRef
     = AutoDisposeProviderRef<List<CreditScore>>;
-String _$demoCreditScoresHash() => r'462a2fc64577a4e79f9c0fcb8226e4af5ed24532';
+String _$demoCreditScoresHash() => r'a16a43bc75346ad457371816398275c6f358fba0';
 
 /// See also [DemoCreditScores].
 @ProviderFor(DemoCreditScores)

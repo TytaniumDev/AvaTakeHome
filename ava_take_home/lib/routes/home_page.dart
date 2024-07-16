@@ -1,3 +1,4 @@
+import 'package:ava_take_home/demo_mode.dart';
 import 'package:ava_take_home/ui/adaptive.dart';
 import 'package:ava_take_home/components/ava_account_detail_card/ava_account_detail_card_view.dart';
 import 'package:ava_take_home/components/credit_factors/credit_factors_view.dart';
@@ -9,26 +10,35 @@ import 'package:ava_take_home/routes/settings.dart';
 import 'package:ava_take_home/ui/theme.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   static const route = "/";
 
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Home',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
+        title: GestureDetector(
+          onTap: () {
+            ref.read(demoModeProvider.notifier).toggleDemoMode();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Toggled Demo Mode!')),
+            );
+          },
+          child: const Text(
+            'Home',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
         centerTitle: true,
@@ -91,16 +101,16 @@ class __HomePageListState extends State<_HomePageList> {
       ),
       const _HomeListItem(
         title: 'Credit factors',
-        childPadding: EdgeInsets.zero,
+        childPadding: EdgeInsets.only(top: 12),
         child: CreditFactorsView(),
       ),
-      const _HomeListItem(
+      _HomeListItem(
         title: 'Account details',
         child: Column(
           children: [
             AvaAccountDetailCardView(),
-            SizedBox(height: 34),
-            TotalBalanceCardView(),
+            const SizedBox(height: 34),
+            const TotalBalanceCardView(),
           ],
         ),
       ),

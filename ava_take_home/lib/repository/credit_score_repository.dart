@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:ava_take_home/demo_mode.dart';
 import 'package:ava_take_home/model/credit_score.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -37,12 +38,20 @@ List<CreditScore> creditScoresForLastTwelveMonths(
 
 @riverpod
 class DemoCreditScores extends _$DemoCreditScores {
+  Timer? _timer;
+
   @override
   List<CreditScore> build() {
-    Timer.periodic(const Duration(seconds: 3), (timer) {
-      final lastCreditScore = state.first;
-      state = demoData(generateNextDemoScore(lastCreditScore));
-    });
+    final demoModeEnabled = ref.watch(demoModeProvider);
+
+    if (demoModeEnabled) {
+      _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+        final lastCreditScore = state.first;
+        state = demoData(generateNextDemoScore(lastCreditScore));
+      });
+    } else {
+      _timer?.cancel();
+    }
 
     return demoData();
   }
@@ -52,8 +61,8 @@ class DemoCreditScores extends _$DemoCreditScores {
       if (firstItem != null) firstItem,
       if (firstItem == null)
         CreditScore(
-          currentScore: 724,
-          lastUpdatedDate: DateTime.now().subtract(const Duration(days: 1)),
+          currentScore: 720,
+          lastUpdatedDate: DateTime.now().subtract(const Duration(hours: 2)),
           nextUpdateDate: DateTime.now().add(const Duration(days: 2)),
           latestChange: 2,
           creditProvider: CreditProvider.experian,
@@ -150,8 +159,7 @@ class DemoCreditScores extends _$DemoCreditScores {
     return lastCreditScore.copyWith(
       currentScore: nextScore,
       latestChange: creditScoreChange,
-      lastUpdatedDate:
-          DateTime.now().subtract(daysSinceUpdate),
+      lastUpdatedDate: DateTime.now().subtract(daysSinceUpdate),
       nextUpdateDate: lastCreditScore.nextUpdateDate.add(daysSinceUpdate),
     );
   }

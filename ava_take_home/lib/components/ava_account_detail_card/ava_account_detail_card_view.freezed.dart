@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AvaAccountDetailCardViewData {
   int get balance => throw _privateConstructorUsedError;
+  int get availableToSpend => throw _privateConstructorUsedError;
   int get creditLimit => throw _privateConstructorUsedError;
   int get spendLimit => throw _privateConstructorUsedError;
   int get utilization => throw _privateConstructorUsedError;
@@ -34,7 +35,12 @@ abstract class $AvaAccountDetailCardViewDataCopyWith<$Res> {
       _$AvaAccountDetailCardViewDataCopyWithImpl<$Res,
           AvaAccountDetailCardViewData>;
   @useResult
-  $Res call({int balance, int creditLimit, int spendLimit, int utilization});
+  $Res call(
+      {int balance,
+      int availableToSpend,
+      int creditLimit,
+      int spendLimit,
+      int utilization});
 }
 
 /// @nodoc
@@ -52,6 +58,7 @@ class _$AvaAccountDetailCardViewDataCopyWithImpl<$Res,
   @override
   $Res call({
     Object? balance = null,
+    Object? availableToSpend = null,
     Object? creditLimit = null,
     Object? spendLimit = null,
     Object? utilization = null,
@@ -60,6 +67,10 @@ class _$AvaAccountDetailCardViewDataCopyWithImpl<$Res,
       balance: null == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
+              as int,
+      availableToSpend: null == availableToSpend
+          ? _value.availableToSpend
+          : availableToSpend // ignore: cast_nullable_to_non_nullable
               as int,
       creditLimit: null == creditLimit
           ? _value.creditLimit
@@ -86,7 +97,12 @@ abstract class _$$AvaAccountDetailCardViewDataImplCopyWith<$Res>
       __$$AvaAccountDetailCardViewDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int balance, int creditLimit, int spendLimit, int utilization});
+  $Res call(
+      {int balance,
+      int availableToSpend,
+      int creditLimit,
+      int spendLimit,
+      int utilization});
 }
 
 /// @nodoc
@@ -103,6 +119,7 @@ class __$$AvaAccountDetailCardViewDataImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? balance = null,
+    Object? availableToSpend = null,
     Object? creditLimit = null,
     Object? spendLimit = null,
     Object? utilization = null,
@@ -111,6 +128,10 @@ class __$$AvaAccountDetailCardViewDataImplCopyWithImpl<$Res>
       balance: null == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
+              as int,
+      availableToSpend: null == availableToSpend
+          ? _value.availableToSpend
+          : availableToSpend // ignore: cast_nullable_to_non_nullable
               as int,
       creditLimit: null == creditLimit
           ? _value.creditLimit
@@ -134,12 +155,15 @@ class _$AvaAccountDetailCardViewDataImpl
     implements _AvaAccountDetailCardViewData {
   _$AvaAccountDetailCardViewDataImpl(
       {required this.balance,
+      required this.availableToSpend,
       required this.creditLimit,
       required this.spendLimit,
       required this.utilization});
 
   @override
   final int balance;
+  @override
+  final int availableToSpend;
   @override
   final int creditLimit;
   @override
@@ -149,7 +173,7 @@ class _$AvaAccountDetailCardViewDataImpl
 
   @override
   String toString() {
-    return 'AvaAccountDetailCardViewData(balance: $balance, creditLimit: $creditLimit, spendLimit: $spendLimit, utilization: $utilization)';
+    return 'AvaAccountDetailCardViewData(balance: $balance, availableToSpend: $availableToSpend, creditLimit: $creditLimit, spendLimit: $spendLimit, utilization: $utilization)';
   }
 
   @override
@@ -158,6 +182,8 @@ class _$AvaAccountDetailCardViewDataImpl
         (other.runtimeType == runtimeType &&
             other is _$AvaAccountDetailCardViewDataImpl &&
             (identical(other.balance, balance) || other.balance == balance) &&
+            (identical(other.availableToSpend, availableToSpend) ||
+                other.availableToSpend == availableToSpend) &&
             (identical(other.creditLimit, creditLimit) ||
                 other.creditLimit == creditLimit) &&
             (identical(other.spendLimit, spendLimit) ||
@@ -167,8 +193,8 @@ class _$AvaAccountDetailCardViewDataImpl
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, balance, creditLimit, spendLimit, utilization);
+  int get hashCode => Object.hash(runtimeType, balance, availableToSpend,
+      creditLimit, spendLimit, utilization);
 
   @JsonKey(ignore: true)
   @override
@@ -183,12 +209,15 @@ abstract class _AvaAccountDetailCardViewData
     implements AvaAccountDetailCardViewData {
   factory _AvaAccountDetailCardViewData(
       {required final int balance,
+      required final int availableToSpend,
       required final int creditLimit,
       required final int spendLimit,
       required final int utilization}) = _$AvaAccountDetailCardViewDataImpl;
 
   @override
   int get balance;
+  @override
+  int get availableToSpend;
   @override
   int get creditLimit;
   @override

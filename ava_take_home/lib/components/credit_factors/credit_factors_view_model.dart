@@ -23,7 +23,7 @@ class CreditFactorsViewModel extends _$CreditFactorsViewModel {
       ),
       ageOfCreditHistory: CreditFactorViewData(
         value: Jiffy.parseFromDateTime(DateTime.utc(0))
-            .add(years: 1, months: 4)
+            .add(years: 1, months: 3)
             .dateTime,
         impact: ImpactLevel.low,
       ),

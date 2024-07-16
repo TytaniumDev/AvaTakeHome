@@ -89,7 +89,6 @@ class _AccountDetail extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        // TODO Animate this
         Padding(
           padding: const EdgeInsetsDirectional.only(end: 16),
           child: _UtilizationAmountBar(utilization: viewData.utilization),
@@ -134,6 +133,7 @@ class _UtilizationAmountBar extends StatefulWidget {
   final int utilization;
 
   const _UtilizationAmountBar({
+    // ignore: unused_element
     super.key,
     required this.utilization,
   });

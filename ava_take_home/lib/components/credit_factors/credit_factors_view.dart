@@ -220,7 +220,7 @@ extension on ImpactLevel {
       case ImpactLevel.high:
         return 'HIGH IMPACT';
       case ImpactLevel.medium:
-        return 'MEDIUM IMPACT';
+        return 'MED IMPACT';
       case ImpactLevel.low:
         return 'LOW IMPACT';
     }

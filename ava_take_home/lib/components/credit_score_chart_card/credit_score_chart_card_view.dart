@@ -84,6 +84,7 @@ class _Chart extends ConsumerWidget {
   final double width;
 
   const _Chart({
+    // ignore: unused_element
     super.key,
     required this.width,
   });

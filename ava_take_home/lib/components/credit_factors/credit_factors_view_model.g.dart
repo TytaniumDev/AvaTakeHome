@@ -7,7 +7,7 @@ part of 'credit_factors_view_model.dart';
 // **************************************************************************
 
 String _$creditFactorsViewModelHash() =>
-    r'1d6309f62f6a1f75066eece7892f7c008db5abfa';
+    r'60f402b7bff6a86ec0249b872b084ab826f9b92d';
 
 /// See also [CreditFactorsViewModel].
 @ProviderFor(CreditFactorsViewModel)

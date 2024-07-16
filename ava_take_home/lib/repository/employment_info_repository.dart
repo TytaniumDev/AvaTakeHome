@@ -90,7 +90,6 @@ class LocalEmploymentInfo extends _$LocalEmploymentInfo
 
   @override
   Future<void> updateEmploymentInfo(EmploymentInfo employmentInfo) async {
-    print('Setting state to $employmentInfo');
     state = AsyncValue.data(employmentInfo);
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(_employmentInfoKey, jsonEncode(employmentInfo));

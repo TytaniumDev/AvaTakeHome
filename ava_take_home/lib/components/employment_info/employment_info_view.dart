@@ -1,5 +1,6 @@
 import 'package:ava_take_home/ui/adaptive.dart';
 import 'package:ava_take_home/ui/animation.dart';
+import 'package:ava_take_home/ui/plurals.dart';
 import 'package:ava_take_home/ui/text_validation.dart';
 import 'package:ava_take_home/components/employment_info/employment_info_view_model.dart';
 import 'package:ava_take_home/components/feedback_sheet/feedback_sheet_view.dart';
@@ -172,7 +173,11 @@ class _EmploymentInfoForm extends ConsumerWidget {
   final bool inEditMode;
   final Function(bool isValid) onFormChanged;
 
-  const _EmploymentInfoForm({
+  
+  final currencyFormat = NumberFormat.simpleCurrency(decimalDigits: 0);
+  final currencyEditFormat = NumberFormat.decimalPattern();
+
+  _EmploymentInfoForm({
     required this.formKey,
     required this.inEditMode,
     required this.onFormChanged,
@@ -193,8 +198,6 @@ class _EmploymentInfoForm extends ConsumerWidget {
     final viewData = ref.watch(employmentInfoViewModelProvider);
     final viewModel = ref.read(employmentInfoViewModelProvider.notifier);
 
-    final currencyFormat = NumberFormat.simpleCurrency(decimalDigits: 0);
-    final currencyEditFormat = NumberFormat.decimalPattern();
 
     return viewData.when(
       skipLoadingOnReload: true,
@@ -236,7 +239,6 @@ class _EmploymentInfoForm extends ConsumerWidget {
               textCapitalization: TextCapitalization.words,
               onFieldSubmitted: (text) => viewModel.updateEmployer(text),
               onSaved: (text) {
-                print('onSaved employer, text is $text');
                 if (text != null) {
                   viewModel.updateEmployer(text);
                 }
@@ -339,9 +341,11 @@ class _EmploymentInfoForm extends ConsumerWidget {
           _AnimatedInfoField(
             inEditMode: inEditMode,
             title: 'Time with employer',
-            // TODO make this handle plurals
             info:
-                '${viewData.timeWithEmployerYears} year ${viewData.timeWithEmployerMonths} months',
+                '${viewData.timeWithEmployerYears} '
+                '${yearsPlural(viewData.timeWithEmployerYears)} '
+                '${viewData.timeWithEmployerMonths} '
+                '${monthsPlural(viewData.timeWithEmployerMonths)}',
             editWidget: Row(
               children: [
                 Expanded(
@@ -356,8 +360,7 @@ class _EmploymentInfoForm extends ConsumerWidget {
                     dropdownMenuEntries:
                         List.generate(100, (number) => number).map((number) {
                       return DropdownMenuEntry(
-                        // TODO Handle plurals
-                        label: '$number year',
+                        label: '$number ${yearsPlural(number)}',
                         value: number,
                       );
                     }).toList(),
@@ -376,8 +379,7 @@ class _EmploymentInfoForm extends ConsumerWidget {
                     dropdownMenuEntries:
                         List.generate(12, (number) => number).map((number) {
                       return DropdownMenuEntry(
-                        // TODO Handle plurals
-                        label: '$number months',
+                        label: '$number ${monthsPlural(number)}',
                         value: number,
                       );
                     }).toList(),
@@ -441,7 +443,7 @@ class _EmploymentInfoForm extends ConsumerWidget {
             inEditMode: inEditMode,
             title: 'Is your pay a direct deposit?',
             info: viewData.isPayDirectDeposit ? 'Yes' : 'No',
-            // TODO The radio buttons don't quite match spec
+            // The radio buttons don't quite match spec :(
             editWidget: Row(
               children: [
                 GestureDetector(

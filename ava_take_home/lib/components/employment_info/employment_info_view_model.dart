@@ -24,7 +24,8 @@ class EmploymentInfoViewModel extends _$EmploymentInfoViewModel {
     return employmentInfoModel.when(
       error: (error, stack) =>
           Future.error('From the ViewModel: $error\n$stack'),
-      //TODO Figure out how to propogate loading state.
+      // There must be a better way to pass up a loading state, but I've run
+      // out of time to figure it out.
       loading: () => Future.error('Loading'),
       data: (model) {
         _latestEmploymentInfo = model;
@@ -76,8 +77,10 @@ class EmploymentInfoViewModel extends _$EmploymentInfoViewModel {
   }
 
   void updateEmployer(String employer) {
-    _latestEmploymentInfo = _latestEmploymentInfo.copyWith(employer: employer);
-    _repository.updateEmploymentInfo(_latestEmploymentInfo);
+    _repository.updateEmploymentInfo(
+      _latestEmploymentInfo =
+          _latestEmploymentInfo.copyWith(employer: employer),
+    );
   }
 
   void updateJobTitle(String jobTitle) {
@@ -111,7 +114,8 @@ class EmploymentInfoViewModel extends _$EmploymentInfoViewModel {
   void updateIsPayDirectDeposit(bool isPayDirectDeposit) {
     _repository.updateEmploymentInfo(
       _latestEmploymentInfo = _latestEmploymentInfo.copyWith(
-          isPayDirectDeposit: isPayDirectDeposit),
+        isPayDirectDeposit: isPayDirectDeposit,
+      ),
     );
   }
 

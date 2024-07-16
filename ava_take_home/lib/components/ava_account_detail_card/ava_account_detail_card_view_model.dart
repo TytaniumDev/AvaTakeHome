@@ -11,6 +11,7 @@ class AvaAccountDetailCardViewModel extends _$AvaAccountDetailCardViewModel {
 
     return AvaAccountDetailCardViewData(
       balance: model.balance,
+      availableToSpend: model.spendLimit - model.balance,
       creditLimit: model.creditLimit,
       spendLimit: model.spendLimit,
       utilization: ((model.balance / model.creditLimit) * 100).toInt(),

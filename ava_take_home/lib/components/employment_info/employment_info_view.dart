@@ -55,12 +55,12 @@ class _EmploymentInfoViewState extends State<EmploymentInfoView> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 12.0, bottom: 12),
+            padding: const EdgeInsets.only(top: 12, bottom: 20),
             child: Column(
               children: [
                 _EditModeAnimatedSwitcher(
                   viewModeChild: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.only(bottom: 8),
                     child: OutlinedButton(
                       onPressed: () {
                         setState(() {
@@ -450,7 +450,7 @@ class _EmploymentInfoForm extends ConsumerWidget {
                   onTap: () => viewModel.updateIsPayDirectDeposit(true),
                   child: Row(
                     children: [
-                      Radio.adaptive(
+                      Radio(
                         value: true,
                         groupValue: viewData.isPayDirectDeposit,
                         onChanged: (value) {

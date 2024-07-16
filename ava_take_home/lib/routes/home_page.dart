@@ -131,7 +131,7 @@ class __HomePageListState extends State<_HomePageList> {
         controller: scrollController,
         maxCrossAxisExtent: gridMaxCrossAxisExtent,
         mainAxisSpacing: 24,
-        padding: const EdgeInsets.only(top: 32, bottom: 16),
+        padding: const EdgeInsets.only(top: 32, bottom: 24),
         itemCount: listItems.length,
         itemBuilder: (context, index) {
           return listItems[index];

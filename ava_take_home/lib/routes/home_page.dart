@@ -24,6 +24,7 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: GestureDetector(
           onTap: () {
             ref.read(demoModeProvider.notifier).toggleDemoMode();

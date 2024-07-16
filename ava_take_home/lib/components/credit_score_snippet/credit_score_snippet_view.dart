@@ -97,7 +97,7 @@ class _ScoreChangeChip extends StatelessWidget {
         shape: const StadiumBorder(),
       ),
       child: AnimatedText(
-        '${scoreChange >= 0 ? '+' : '-'}${scoreChange}pts',
+        '${scoreChange >= 0 ? '+' : ''}${scoreChange}pts',
         style: const TextStyle(
           color: Colors.white,
           fontSize: 14,

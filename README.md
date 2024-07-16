@@ -2,6 +2,8 @@
 
 ## How to run
 
+Open the [app on the Github Pages deployment](https://tytaniumdev.github.io/AvaTakeHome/)! It's fully responsive!
+
 I kept the generated files checked in, so you should be able to just do a standard `flutter run` from the `ava_take_home` directory!
 
 I only tested on Web, but it should work on Android and iOS as well (and probably Mac OS, Linux, and Windows).
@@ -38,7 +40,7 @@ Here's what I'd like the test suite to look like, if I had the time to write a L
 
 ## Difficulties while interpreting the Figma spec
 
-I wanted to note down areas where the implementation may differ from the (Figma spec provided)[https://www.figma.com/design/fgAwUqgFK30hJqYo0byDeG/Untitled?node-id=0-1] and explain what caused the differences.
+I wanted to note down areas where the implementation may differ from the [Figma spec provided](https://www.figma.com/design/fgAwUqgFK30hJqYo0byDeG/Untitled?node-id=0-1) and explain what caused the differences.
 
 ### General
 * Font files weren't provided, so the look of the text won't be quite right. This introduces additional challenges as well, as the heights of symbols vary between fonts, and the Figma spec relies on the height of the symbols for some layouts. Pixel perfect precision couldn't be achieved because of this, but I got as close as I could through guesstimating.

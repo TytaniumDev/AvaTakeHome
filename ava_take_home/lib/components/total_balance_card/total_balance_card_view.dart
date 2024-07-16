@@ -429,6 +429,8 @@ class _UtilizationBarSectionRangeText extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             lastSection ? '<$min%' : '$min-$max%',
+            maxLines: 1,
+            overflow: TextOverflow.visible,
             textAlign: alignment.toTextAlign(),
             style: TextStyle(
               color: utilizationWithinRange

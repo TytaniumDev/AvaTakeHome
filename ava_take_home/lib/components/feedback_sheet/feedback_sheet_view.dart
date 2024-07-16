@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 showFeedbackSheet(BuildContext context) {
   showModalBottomSheet(
     useRootNavigator: true,
+    useSafeArea: true,
     backgroundColor: Colors.transparent,
     context: context,
     builder: (_) => const FeedbackSheetView(),
@@ -87,7 +88,7 @@ class _FeedbackSheetViewState extends State<FeedbackSheetView> {
                     child: const Text('Send feedback'),
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 12),
               ],
             ),
           ),

@@ -66,18 +66,20 @@ class _FeedbackSheetViewState extends State<FeedbackSheetView> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TextFormField(
-                    maxLines: 7,
-                    keyboardType: TextInputType.multiline,
-                    textCapitalization: TextCapitalization.sentences,
-                    validator: notEmptyValidator,
-                    onChanged: (text) {
-                      setState(() {
-                        isInputValid = notEmptyValidator(text) == null;
-                      });
-                    },
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: TextFormField(
+                      maxLines: 20,
+                      keyboardType: TextInputType.multiline,
+                      textCapitalization: TextCapitalization.sentences,
+                      validator: notEmptyValidator,
+                      onChanged: (text) {
+                        setState(() {
+                          isInputValid = notEmptyValidator(text) == null;
+                        });
+                      },
+                    ),
                   ),
                 ),
                 Padding(

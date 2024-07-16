@@ -90,7 +90,7 @@ class _FeedbackSheetViewState extends State<FeedbackSheetView> {
                     child: const Text('Send feedback'),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 20),
               ],
             ),
           ),

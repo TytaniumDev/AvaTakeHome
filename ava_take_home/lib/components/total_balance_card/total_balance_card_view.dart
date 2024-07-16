@@ -439,7 +439,6 @@ class _UtilizationBarSectionRangeText extends StatelessWidget {
               fontSize: 12,
               fontWeight:
                   utilizationWithinRange ? FontWeight.w600 : FontWeight.w400,
-              letterSpacing: 0.12,
             ),
           ),
         ],

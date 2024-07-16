@@ -53,18 +53,23 @@ class HomePage extends ConsumerWidget {
         ),
       ),
       backgroundColor: AppColors.manilla,
-      body: const SafeArea(
-        child: Column(
-          children: [
-            _HeaderChin(
-              child: CreditScoreHeaderView(),
-            ),
-            Expanded(
-              child: ResponsiveContainer(
-                child: _HomePageList(),
+      body: SafeArea(
+        // An attempt to fix a weird 1 pixel gap between the AppBar and
+        // _HeaderChin. Might be a Flutter rendering issue?
+        child: Transform.translate(
+          offset: const Offset(0, -1),
+          child: const Column(
+            children: [
+              _HeaderChin(
+                child: CreditScoreHeaderView(),
               ),
-            ),
-          ],
+              Expanded(
+                child: ResponsiveContainer(
+                  child: _HomePageList(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

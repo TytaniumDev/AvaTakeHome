@@ -25,5 +25,3 @@ doc/api/
 
 .flutter-plugins
 .flutter-plugins-dependencies
-
-!ava_take_home/build/web/

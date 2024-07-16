@@ -27,6 +27,9 @@ This could easily be moved around to organize by feature (home, employment_info,
 * Instead of staticly accessing all of the colors, I should be retrieving them from Theme.of(context) and using ThemeExtensions so in the future Dark mode could be supported, or other OS color styles.
 * The Radio buttons in the Edit employment info page don't match spec. I'd make custom ones since theming is limited for the Material implementation.
 
+### Comments
+Every public class should have a dartdoc attached to it, along with every public variable. This is also unfortunately one of the things sacrificed due to time, but there are scatterings of documentation throughout.
+
 ### Testing
 Unfortunately, I did not have enough time to write the tests for everything. I prioritized writing everything in a testable way, and implementing the UI to spec.
 

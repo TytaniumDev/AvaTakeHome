@@ -4,12 +4,12 @@
 
 Open the [app on the Github Pages deployment](https://tytaniumdev.github.io/AvaTakeHome/)! It's fully responsive!
 
-I kept the generated files checked in, so you should be able to just do a standard `flutter run` from the `ava_take_home` directory!
-
-I only tested on Web, but it should work on Android and iOS as well (and probably Mac OS, Linux, and Windows).
+I kept the generated files checked in, so you should be able to just do a standard `flutter run` from the `ava_take_home` directory.
 
 > [!IMPORTANT] 
 > Try tapping on the "Home" title to toggle on and off Demo mode, which will have the Repositories start generating random, but sane, data so you can see all of the nice animations!
+
+I only tested on Web, but it should work on Android and iOS as well (and probably Mac OS, Linux, and Windows).
 
 ## Folder Organization
 
@@ -43,7 +43,7 @@ Here's what I'd like the test suite to look like, if I had the time to write a L
 I wanted to note down areas where the implementation may differ from the [Figma spec provided](https://www.figma.com/design/fgAwUqgFK30hJqYo0byDeG/Untitled?node-id=0-1) and explain what caused the differences.
 
 ### General
-* Font files weren't provided, so the look of the text won't be quite right. This introduces additional challenges as well, as the heights of symbols vary between fonts, and the Figma spec relies on the height of the symbols for some layouts. Pixel perfect precision couldn't be achieved because of this, but I got as close as I could through guesstimating.
+* Font files weren't provided, so the look of the text won't be quite right. I used a trial version of the fonts used, but they only include the symbols for `a-z`, `A-Z`, and `0-9`. Notably, the `%` symbol is missing, so it looks off. This introduces additional challenges as well, as the heights of symbols vary between fonts, and the Figma spec relies on the height of the symbols for some layouts. Pixel perfect precision couldn't be achieved because of this, but I got as close as I could through guesstimating.
 
 ### Home page
 * The progress ring in the header seems to be at a mystery value. It should be further along the track if it is showing the progress towards maximum credit score (850), and further back if it is showing the progress within the "Good" score bucket (661-780). I'm assuming it's meant to show progress towards maximum credit score, and went with that implementation instead.

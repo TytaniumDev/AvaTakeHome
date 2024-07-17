@@ -475,7 +475,7 @@ class _EmploymentInfoForm extends ConsumerWidget {
                   onTap: () => viewModel.updateIsPayDirectDeposit(false),
                   child: Row(
                     children: [
-                      Radio.adaptive(
+                      Radio(
                         value: false,
                         groupValue: viewData.isPayDirectDeposit,
                         onChanged: (value) {
